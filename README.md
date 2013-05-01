@@ -5,6 +5,8 @@ Linux and Mac-friendly Python parser to connect and interact with multiple Neuro
 
 This is the software used by Moonshot Lab at Barkley (http://moonshot.barkleyus.com/) for all of our internal MindWave projects.
 
+Stefaan Himpe added support for asic eeg power and raw wave signals and improved checksum checking.
+
 Basic Usage
 -----------
 
@@ -161,7 +163,7 @@ Event hooks
 `headset.` **standby_handlers** `[]` - Handlers are fired whenever the dongle goes into standby (not connected to a headset). Expects handlers with the prototype `my_function(headset)` and passes in the current headset object.
 
 Changelog:
-----------
+==========
 
 01 may 2013: Stefaan Himpe added support for asic eeg power values, raw wave values, and proper checksum checking
 
