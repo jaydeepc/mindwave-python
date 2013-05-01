@@ -1,35 +1,38 @@
 import select, serial, threading
 
 # Byte codes
-CONNECT              = '\xc0'
-DISCONNECT           = '\xc1'
-AUTOCONNECT          = '\xc2'
-SYNC                 = '\xaa'
-EXCODE               = '\x55'
-POOR_SIGNAL          = '\x02'
-ATTENTION            = '\x04'
-MEDITATION           = '\x05'
-BLINK                = '\x16'
-HEADSET_CONNECTED    = '\xd0'
-HEADSET_NOT_FOUND    = '\xd1'
+CONNECT = '\xc0'
+DISCONNECT = '\xc1'
+AUTOCONNECT = '\xc2'
+SYNC = '\xaa'
+EXCODE = '\x55'
+POOR_SIGNAL = '\x02'
+ATTENTION = '\x04'
+MEDITATION = '\x05'
+BLINK = '\x16'
+HEADSET_CONNECTED = '\xd0'
+HEADSET_NOT_FOUND = '\xd1'
 HEADSET_DISCONNECTED = '\xd2'
-REQUEST_DENIED       = '\xd3'
-STANDBY_SCAN         = '\xd4'
+REQUEST_DENIED = '\xd3'
+STANDBY_SCAN = '\xd4'
+ASIC_EEG_POWER = '\x83'
+RAW_WAVE = '\x80'
+BATTERY_CODE = '\x01'
 
 # Status codes
-STATUS_CONNECTED     = 'connected'
-STATUS_SCANNING      = 'scanning'
-STATUS_STANDBY       = 'standby'
+STATUS_CONNECTED = 'connected'
+STATUS_SCANNING = 'scanning'
+STATUS_STANDBY = 'standby'
 
 class Headset(object):
     """
-    A MindWave Headset
-    """
+A MindWave Headset
+"""
 
     class DongleListener(threading.Thread):
         """
-        Serial listener for dongle device.
-        """
+Serial listener for dongle device.
+"""
         def __init__(self, headset, *args, **kwargs):
             """Set up the listener device."""
             self.headset = headset
@@ -62,14 +65,16 @@ class Headset(object):
                         payload = s.read(plength)
 
                         # Verify its checksum
-                        val = sum(ord(b) for b in payload[:-1])
+                        val = sum(ord(b) for b in payload)
                         val &= 0xff
                         val = ~val & 0xff
                         chksum = ord(s.read())
 
-                        #if val == chksum:
-                        if True: # ignore bad checksums
+                        if val == chksum:
                             self.parse_payload(payload)
+                        else:
+                            for handler in self.headset.checksum_mismatch_handlers:
+                              handler(self.headset, val, chksum)
                 except (select.error, OSError):
                     break
                 except serial.SerialException:
@@ -137,8 +142,25 @@ class Headset(object):
                         continue
                     value, payload = payload[:vlength], payload[vlength:]
                     # Multi-byte EEG and Raw Wave codes not included
+                    if code == ASIC_EEG_POWER:
+                        # delta, theta, low-alpha, high-alpha, low-beta, high-beta, low-gamma, mid-gamma
+                        hval = value.encode('hex')
+                        delta = int(hval[0:6],16)
+                        theta = int(hval[6:12],16)
+                        lowalpha = int(hval[12:18],16)
+                        highalpha = int(hval[18:24],16)
+                        lowbeta = int(hval[24:30],16)
+                        highbeta = int(hval[30:36],16)
+                        lowgamma = int(hval[36:42],16)
+                        midgamma = int(hval[42:48],16)
+                        for handler in self.headset.eeg_power_handlers:
+                          handler(self.headset, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, midgamma)
+                    elif code == RAW_WAVE:
+                        hval = int(value.encode('hex'),16)
+                        for handler in self.headset.raw_wave_handlers:
+                          handler(self.headset, hval)
                     # See Mindset Communications Protocol
-                    if code == HEADSET_CONNECTED:
+                    elif code == HEADSET_CONNECTED:
                         # Headset connect success
                         run_handlers = self.headset.status != STATUS_CONNECTED
                         self.headset.status = STATUS_CONNECTED
@@ -168,6 +190,8 @@ class Headset(object):
                         # Request denied
                         for handler in self.headset.request_denied_handlers:
                             handler(self.headset)
+                        payload.encode('hex')
+
                     elif code == STANDBY_SCAN:
                         # Standby/Scan mode
                         try:
@@ -191,7 +215,7 @@ class Headset(object):
 
 
     def __init__(self, device, headset_id=None, open_serial=True):
-        """Initialize the  headset."""
+        """Initialize the headset."""
         # Initialize headset values
         self.dongle = None
         self.listener = None
@@ -215,6 +239,9 @@ class Headset(object):
         self.request_denied_handlers = []
         self.scanning_handlers = []
         self.standby_handlers = []
+        self.eeg_power_handlers = []
+        self.raw_wave_handlers = []
+        self.checksum_mismatch_handlers = []
 
         # Open the socket
         if open_serial:
@@ -243,7 +270,7 @@ class Headset(object):
         """Open the serial connection and begin listening for data."""
         # Establish serial connection to the dongle
         if not self.dongle or not self.dongle.isOpen():
-            self.dongle = serial.Serial(self.device, 115200)
+            self.dongle = serial.Serial(self.device, 57600)
 
         # Begin listening to the serial device
         if not self.listener or not self.listener.isAlive():
@@ -254,3 +281,34 @@ class Headset(object):
     def serial_close(self):
         """Close the serial connection."""
         self.dongle.close()
+
+if __name__ == "__main__":
+
+    def attention_handler(headset, value):
+      print "Attention {0}".format(value),
+
+    def meditation_handler(headset, value):
+      print "Meditation {0}".format(value)
+
+    def blink_handler(headset, value):
+      print "Blink {0}".format(value)
+
+    def eeg_power_handler(headset, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, midgamma):
+      print "Delta: {0}, Theta: {1}, LowAlpha: {2}, HighAlpha: {3}, LowBeta: {4}, HighBeta: {5}, LowGamma: {6}, MidGamma: {7}".format(delta,theta,lowalpha,highalpha,lowbeta,highbeta,lowgamma,midgamma)
+
+    def raw_wave_handler(headset, val):
+      print val, " ", 
+
+    def checksum_mismatch_handler(headset, val, chksum):
+      print "CHKSUM MISMATCH: expected {0}, actual {1}".format(val,chksum)
+
+    h = Headset('/dev/rfcomm0')
+    h.attention_handlers.append(attention_handler)
+    h.meditation_handlers.append(meditation_handler)
+    h.blink_handlers.append(blink_handler)
+    h.eeg_power_handlers.append(eeg_power_handler)
+#    h.raw_wave_handlers.append(raw_wave_handler)
+    h.checksum_mismatch_handlers.append(checksum_mismatch_handler)
+
+    raw_input ("Press enter to stop....")
+

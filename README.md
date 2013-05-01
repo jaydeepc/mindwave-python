@@ -144,6 +144,12 @@ Event hooks
 
 `headset.` **connected_handlers** `[]` - Handlers are fired whenever the headset is connected. Expects handlers with the prototype `my_function(headset)` and passes in the current headset object.
 
+`headset.` **eeg_power_handler** `[]` - Handlers are fired whenever a raw wave value is sent. Expects handlers with the prototype `my_function(headset, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, midgamma)` and passes in the current headset object and the delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma and midgamma values.
+
+`headset.` **raw_wave_handlers** `[]` - Handlers are fired whenever a raw wave value is sent. Expects handlers with the prototype `my_function(headset, raw_wave_value)` and passes in the current headset object and the raw wave value.
+
+`headset.` **chksum_mismatch_handlers** `[]` - Handlers are fired whenever a checksum check fails. Expects handlers with the prototype `my_function(headset, expected_checksum, actual_checksum)` and passes in the current headset object and expected and actual checksum.
+
 `headset.` **notfound_handlers** `[]` - Handlers are fired whenever the headset specified cannot be found. Expects handlers with the prototype `my_function(headset, not_found_id)` and passes in the current headset object and the headset id that could not be found.
 
 `headset.` **disconnected_handlers** `[]` - Handlers are fired whenever the headset is disconnected. Expects handlers with the prototype `my_function(headset)` and passes in the current headset object.
@@ -153,4 +159,9 @@ Event hooks
 `headset.` **scanning_handlers** `[]` - Handlers are fired whenever the dongle begins scanning for a headset. Expects handlers with the prototype `my_function(headset)` and passes in the current headset object.
 
 `headset.` **standby_handlers** `[]` - Handlers are fired whenever the dongle goes into standby (not connected to a headset). Expects handlers with the prototype `my_function(headset)` and passes in the current headset object.
+
+Changelog:
+----------
+
+01 may 2013: Stefaan Himpe added support for asic eeg power values, raw wave values, and proper checksum checking
 
