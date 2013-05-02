@@ -1,0 +1,91 @@
+from PyQt4 import QtCore, QtGui
+from mainwindow import Ui_MainWindow
+import mindwave
+from collections import deque
+import pyeeg
+
+RAW_VAL_WIN_SIZE = 512
+NO_OF_POINTS = 100
+WAVE_TYPES = ['delta', 'theta', 'alpha', 'beta', 'gamma', 'rest']
+
+class MyMainWindow(Ui_MainWindow):
+
+  def __init__(self, MainWindow):
+    """
+    set up ui
+    connect signals/slots
+    """
+    super(MyMainWindow, self).__init__()
+    self.setupUi(MainWindow)
+    self.MainWindow = MainWindow
+    
+    self.running = False
+    self.startButton.clicked.connect(self.monitor)
+    self.MainWindow.update_ui_signal.connect(self.update_ui)
+
+    self.last_512_raw_waves = deque([0]*RAW_VAL_WIN_SIZE, RAW_VAL_WIN_SIZE)
+
+    self.vals = {}
+    for wavetype in WAVE_TYPES:
+      self.vals[wavetype] = deque([0]*NO_OF_POINTS, NO_OF_POINTS)
+
+    self.view = {}
+    self.view['raw'] = self.rawView
+    self.view['delta'] = self.deltaView
+    self.view['theta'] = self.thetaView
+    self.view['alpha'] = self.alphaView
+    self.view['beta'] = self.betaView
+    self.view['gamma'] = self.gammaView
+    self.view['rest'] = self.restView
+    for wavetype in WAVE_TYPES + ['raw']:
+      self.view[wavetype].setTitle(wavetype)
+
+    self.counter = 0
+
+  def monitor(self):
+    if self.running:
+      self.h.serial_close()
+      self.running = False
+    else:
+      self.running = True
+      self.h = mindwave.Headset('/dev/rfcomm0')
+      self.h.raw_wave_handlers.append(self.raw_wave_handler)
+
+  def raw_wave_handler(self, headset, value):
+    self.last_512_raw_waves.pop()
+    self.last_512_raw_waves.appendleft(value)
+    self.MainWindow.update_ui_signal.emit()
+
+  def update_ui(self):
+    self.counter += 1
+
+    if self.counter % 10 == 0:
+      self.view['raw']
+      self.view['raw'].plot(self.last_512_raw_waves, pen=(255,255,255), clear=True)
+ 
+    if self.counter >= RAW_VAL_WIN_SIZE:
+        self.counter = 0
+        spectrum, normalized_spectrum = pyeeg.bin_power(self.last_512_raw_waves, [0.5, 4, 8, 13, 30, 100, 256], 512)
+        for i, wavetype in enumerate(WAVE_TYPES):
+          self.vals[wavetype].pop()
+          self.vals[wavetype].appendleft(normalized_spectrum[i])
+          self.view[wavetype].plot(self.vals[wavetype], pen=(255, i*30, i*30), clear=True)
+
+class MainWindowWithCustomSignal(QtGui.QMainWindow):
+
+  update_ui_signal = QtCore.pyqtSignal()
+
+  def __init__(self, *args, **kwargs):
+    super(MainWindowWithCustomSignal, self).__init__(*args, **kwargs)
+
+
+if __name__ == "__main__":
+  import sys
+  app = QtGui.QApplication(sys.argv)
+  app.setApplicationName("Eeg spectrogram FP1")
+  win = MainWindowWithCustomSignal()
+  ui = MyMainWindow(win)
+  win.show()
+  sys.exit(app.exec_())
+
+
