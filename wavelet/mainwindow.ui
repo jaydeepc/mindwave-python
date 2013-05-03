@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="text">
+         <string>Start/Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="deviceComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty2</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QComboBox" name="waveletChoice">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>haar</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db15</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db16</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db17</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db18</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db19</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>db20</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym15</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym16</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym17</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym18</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym19</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sym20</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coif1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coif2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coif3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coif4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>coif5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior1.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior1.3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior1.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior2.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior2.4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior2.6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior2.8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior3.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior3.3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior3.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior3.7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior3.9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior4.4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior5.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>bior6.8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio1.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio1.3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio1.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio2.2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio2.4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio2.6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio2.8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio3.1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio3.3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio3.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio3.7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio3.9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio4.4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio5.5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>rbio6.8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>dmey</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="PlotWidget" name="rawView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="deltaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="thetaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="alphaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="betaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="gammaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="restView"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>startButton</tabstop>
+  <tabstop>rawView</tabstop>
+  <tabstop>deltaView</tabstop>
+  <tabstop>thetaView</tabstop>
+  <tabstop>alphaView</tabstop>
+  <tabstop>betaView</tabstop>
+  <tabstop>gammaView</tabstop>
+  <tabstop>restView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
