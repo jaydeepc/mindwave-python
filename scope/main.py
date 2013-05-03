@@ -44,12 +44,22 @@ class MyMainWindow(Ui_MainWindow):
 
   def monitor(self):
     if self.running:
-      self.h.serial_close()
+      if self.h:
+        self.h.serial_close()
       self.running = False
     else:
       self.running = True
-      self.h = mindwave.Headset('/dev/rfcomm0')
-      self.h.raw_wave_handlers.append(self.raw_wave_handler)
+      self.h = None
+      import serial
+      try:
+        device = self.deviceComboBox.currentText()
+        self.h = mindwave.Headset("{0}".format(device))
+      except serial.serialutil.SerialException:
+        QtGui.QMessageBox.information(self.MainWindow, 'Couldn\'t find the heaset', 'Headset not found. Did you pair and connect to serial device {0}?'.format(device), QtGui.QMessageBox.Ok)
+      if self.h:
+        self.h.raw_wave_handlers.append(self.raw_wave_handler)
+      else:
+        self.running = False
 
   def raw_wave_handler(self, headset, value):
     self.last_512_raw_waves.pop()
@@ -79,7 +89,7 @@ class MainWindowWithCustomSignal(QtGui.QMainWindow):
     super(MainWindowWithCustomSignal, self).__init__(*args, **kwargs)
 
 
-if __name__ == "__main__":
+def main():
   import sys
   app = QtGui.QApplication(sys.argv)
   app.setApplicationName("Eeg spectrogram FP1")
@@ -89,3 +99,5 @@ if __name__ == "__main__":
   sys.exit(app.exec_())
 
 
+if __name__ == "__main__":
+  main()

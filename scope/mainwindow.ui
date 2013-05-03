@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="text">
+         <string>Start/Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="deviceComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/rfcomm2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyUSB2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/ttyS2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>/dev/tty2</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="PlotWidget" name="rawView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="deltaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="thetaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="alphaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="betaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="gammaView"/>
+      </item>
+      <item>
+       <widget class="PlotWidget" name="restView"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>startButton</tabstop>
+  <tabstop>rawView</tabstop>
+  <tabstop>deltaView</tabstop>
+  <tabstop>thetaView</tabstop>
+  <tabstop>alphaView</tabstop>
+  <tabstop>betaView</tabstop>
+  <tabstop>gammaView</tabstop>
+  <tabstop>restView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
