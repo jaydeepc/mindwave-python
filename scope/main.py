@@ -54,8 +54,9 @@ class MyMainWindow(Ui_MainWindow):
       try:
         device = self.deviceComboBox.currentText()
         self.h = mindwave.Headset("{0}".format(device))
-      except serial.serialutil.SerialException:
-        QtGui.QMessageBox.information(self.MainWindow, 'Couldn\'t find the heaset', 'Headset not found. Did you pair and connect to serial device {0}?'.format(device), QtGui.QMessageBox.Ok)
+      except serial.serialutil.SerialException, e:
+        print "{0}".format(e)
+        QtGui.QMessageBox.information(self.MainWindow, 'Couldn\'t find the headset', 'Headset not found. Did you pair and connect to serial device {0}?'.format(device), QtGui.QMessageBox.Ok)
       if self.h:
         self.h.raw_wave_handlers.append(self.raw_wave_handler)
       else:
