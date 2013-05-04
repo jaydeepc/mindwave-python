@@ -8,7 +8,8 @@ import numpy as np
 RAW_VAL_WIN_SIZE = 512
 NO_OF_POINTS = 100
 WAVE_TYPES = ['delta', 'theta', 'alpha', 'beta', 'gamma', 'rest']
-
+BANDS = ['0.5-4','4-8', '8-13', '13-30', '30-100', '100-256', '']
+    
 class MyMainWindow(Ui_MainWindow):
 
   def __init__(self, MainWindow):
@@ -38,10 +39,13 @@ class MyMainWindow(Ui_MainWindow):
     self.view['beta'] = self.betaView
     self.view['gamma'] = self.gammaView
     self.view['rest'] = self.restView
-    for wavetype in WAVE_TYPES + ['raw']:
-      self.view[wavetype].setTitle(wavetype)
+    for i, wavetype in enumerate(WAVE_TYPES + ['raw']):
+      title = wavetype + " " + BANDS[i]
+      if wavetype != "raw": 
+        title += " Hz"
+      self.view[wavetype].setTitle(title)
       if wavetype == "raw":
-        self.view[wavetype].setYRange(0,65535)
+        self.view[wavetype].setYRange(-600,600)
 
     self.counter = 0
     self.blinkcounter = 0
@@ -82,7 +86,7 @@ class MyMainWindow(Ui_MainWindow):
     self.most_recent_N_raw_waves =  list(self.last_512_raw_waves)[0:N]
     mean = np.mean(self.most_recent_N_raw_waves) # mean value must be high
     diff_energy = np.sum(np.abs(np.diff(self.most_recent_N_raw_waves))) # more spikes = bigger number here
-    return mean > 65535/2 and diff_energy < 4*65535 
+    return mean < -2**15/2 and diff_energy < 4*65535 
 
   def update_ui(self):
     self.counter += 1
