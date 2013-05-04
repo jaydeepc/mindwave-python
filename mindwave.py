@@ -24,6 +24,16 @@ STATUS_CONNECTED = 'connected'
 STATUS_SCANNING = 'scanning'
 STATUS_STANDBY = 'standby'
 
+def decode_2s_complement_big_endian(binvalue):
+  import bitstring
+  b = bitstring.BitArray("0x"+binvalue.encode('hex'))
+  return b.intbe
+
+def decode_3byte_littleendian_unsigned(binvalue):
+  import bitstring
+  b = bitstring.BitArray("0x"+binvalue.encode('hex'))
+  return b.uintle
+
 class Headset(object):
     """
 A MindWave Headset
@@ -144,19 +154,18 @@ Serial listener for dongle device.
                     # Multi-byte EEG and Raw Wave codes not included
                     if code == ASIC_EEG_POWER:
                         # delta, theta, low-alpha, high-alpha, low-beta, high-beta, low-gamma, mid-gamma
-                        hval = value.encode('hex')
-                        delta = int(hval[0:6],16)
-                        theta = int(hval[6:12],16)
-                        lowalpha = int(hval[12:18],16)
-                        highalpha = int(hval[18:24],16)
-                        lowbeta = int(hval[24:30],16)
-                        highbeta = int(hval[30:36],16)
-                        lowgamma = int(hval[36:42],16)
-                        midgamma = int(hval[42:48],16)
+                        delta = decode_3byte_littleendian_unsigned(value[0:3])
+                        theta = decode_3byte_littleendian_unsigned(value[3:6])
+                        lowalpha = decode_3byte_littleendian_unsigned(value[6:9])
+                        highalpha = decode_3byte_littleendian_unsigned(value[9:12])
+                        lowbeta = decode_3byte_littleendian_unsigned(value[12:15])
+                        highbeta = decode_3byte_littleendian_unsigned(value[15:18])
+                        lowgamma = decode_3byte_littleendian_unsigned(value[18:21])
+                        midgamma = decode_3byte_littleendian_unsigned(value[21:24])
                         for handler in self.headset.eeg_power_handlers:
                           handler(self.headset, delta, theta, lowalpha, highalpha, lowbeta, highbeta, lowgamma, midgamma)
                     elif code == RAW_WAVE:
-                        hval = int(value.encode('hex'),16)
+                        hval = decode_2s_complement_big_endian(value)
                         for handler in self.headset.raw_wave_handlers:
                           handler(self.headset, hval)
                     # See Mindset Communications Protocol
@@ -307,7 +316,7 @@ if __name__ == "__main__":
     h.meditation_handlers.append(meditation_handler)
     h.blink_handlers.append(blink_handler)
     h.eeg_power_handlers.append(eeg_power_handler)
-#    h.raw_wave_handlers.append(raw_wave_handler)
+    h.raw_wave_handlers.append(raw_wave_handler)
     h.checksum_mismatch_handlers.append(checksum_mismatch_handler)
 
     raw_input ("Press enter to stop....")
