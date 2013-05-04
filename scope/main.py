@@ -48,8 +48,6 @@ class MyMainWindow(Ui_MainWindow):
         self.view[wavetype].setYRange(-600,600)
 
     self.counter = 0
-    self.blinkcounter = 0
-    self.blinks = 0
 
   def monitor(self):
     if self.running:
@@ -76,32 +74,12 @@ class MyMainWindow(Ui_MainWindow):
     self.last_512_raw_waves.appendleft(value)
     self.MainWindow.update_ui_signal.emit()
 
-  def check_eyeblink(self, N):
-    """
-    simplistic check for eye blink
-    - check that mean signal is high in the last N waves
-    - check that not too many spikes occur during the last N waves
-      (by summing absolute value of first order difference)
-    """
-    self.most_recent_N_raw_waves =  list(self.last_512_raw_waves)[0:N]
-    mean = np.mean(self.most_recent_N_raw_waves) # mean value must be high
-    diff_energy = np.sum(np.abs(np.diff(self.most_recent_N_raw_waves))) # more spikes = bigger number here
-    return mean < -2**15/2 and diff_energy < 4*65535 
-
   def update_ui(self):
     self.counter += 1
-    self.blinkcounter += 1
  
     if self.counter % 10 == 0:
       self.view['raw']
       self.view['raw'].plot(self.last_512_raw_waves, pen=(255,255,255), clear=True)
-    N = 80
-    if self.blinkcounter % N == 0:
-        self.blinkcounter = 0
-        if self.check_eyeblink(N):
-          self.blinks += 1
-          print "BLINK {0}".format(self.blinks)
- 
     if self.counter >= RAW_VAL_WIN_SIZE:
         self.counter = 0
         spectrum, normalized_spectrum = pyeeg.bin_power(self.last_512_raw_waves, [0.5, 4, 8, 13, 30, 100, 256], 512)

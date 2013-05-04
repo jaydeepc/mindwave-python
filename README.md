@@ -165,5 +165,7 @@ Event hooks
 Changelog:
 ==========
 
-01 may 2013: Stefaan Himpe added support for asic eeg power values, raw wave values, and proper checksum checking
+05 may 2013: important bug-fixes in the data parser (this breaks the naive eye blink detector)
+04 may 2013: added two visualization tools
+01 may 2013: added support for asic eeg power values, raw wave values, and proper checksum checking
 
