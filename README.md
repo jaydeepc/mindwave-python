@@ -20,7 +20,7 @@ mindwave-python
 
 Linux and Mac-friendly Python parser to connect and interact with multiple NeuroSky MindWave headsets from one machine.
 
-This is the software used by Moonshot Lab at Barkley (http://moonshot.barkleyus.com/) for all of our internal MindWave projects.
+This program is based on the software used by Moonshot Lab at Barkley (http://moonshot.barkleyus.com/) for all of their internal MindWave projects.
 
 Stefaan Himpe added parser support for asic eeg power and raw wave signals and improved checksum checking. He also added some visualization tools to explore the brain waves under several transforms.
 
