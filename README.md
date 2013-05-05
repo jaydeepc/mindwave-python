@@ -7,8 +7,15 @@ This is the software used by Moonshot Lab at Barkley (http://moonshot.barkleyus.
 
 Stefaan Himpe added parser support for asic eeg power and raw wave signals and improved checksum checking. He also added some visualization tools to explore the brain waves under several transforms.
 
-Basic Usage
------------
+Running the sample applications
+-------------------------------
+
+Get the code and put it in some folder, e.g. `/home/your_name/mindwave-python`
+Then, from that folder run one of `scope.py`, `eyeblink.py` or `wavelet.py`.
+
+
+Basic Parser Usage
+------------------
 
 A connection to the headset dongle is established by creating a new `Headset` object. Find the MindWave device(s) on your machine. On a Mac, it looks like this:
 
