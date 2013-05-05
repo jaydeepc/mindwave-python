@@ -12,6 +12,7 @@ Running the sample applications
 
 Get the code and put it in some folder, e.g. `/home/your_name/mindwave-python`
 Then, from that folder run one of `scope.py`, `eyeblink.py` or `wavelet.py`.
+The sample applications have additional dependencies on PyQt4, pyqtgraph, numpy and pywavelet.
 
 
 Basic Parser Usage
