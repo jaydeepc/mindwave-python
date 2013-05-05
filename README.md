@@ -5,7 +5,7 @@ Linux and Mac-friendly Python parser to connect and interact with multiple Neuro
 
 This is the software used by Moonshot Lab at Barkley (http://moonshot.barkleyus.com/) for all of our internal MindWave projects.
 
-Stefaan Himpe added support for asic eeg power and raw wave signals and improved checksum checking.
+Stefaan Himpe added parser support for asic eeg power and raw wave signals and improved checksum checking. He also added some visualization tools to explore the brain waves under several transforms.
 
 Basic Usage
 -----------
@@ -165,6 +165,7 @@ Event hooks
 Changelog:
 ==========
 
+05 may 2013: fft based eye blink detection
 05 may 2013: important bug-fixes in the data parser (this breaks the naive eye blink detector)
 04 may 2013: added two visualization tools
 01 may 2013: added support for asic eeg power values, raw wave values, and proper checksum checking
