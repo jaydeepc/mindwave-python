@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>312</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="startButton">
+          <property name="text">
+           <string>start/stop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Device</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="deviceComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>/dev/rfcomm0</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/rfcomm1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/rfcomm2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyUSB0</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyUSB1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyUSB2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyS0</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyS1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/ttyS2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/tty0</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/tty1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>/dev/tty2</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Blink sensitivity</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="eyeBlinkSensitivity">
+          <property name="text">
+           <string>0.45</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Low blink freq (Hz)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lowerEyeBlinkFrequency">
+          <property name="text">
+           <string>5.0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>High blink freq (Hz)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="higherEyeBlinkFrequency">
+          <property name="text">
+           <string>20.0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Blink once to start&lt;/span&gt; a mouse operation. &lt;span style=&quot; font-weight:600;&quot;&gt;Blink again to stop&lt;/span&gt; ongoing operation.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="operationTable">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>91</height>
+         </size>
+        </property>
+        <row>
+         <property name="text">
+          <string>Mouse Move</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Mouse Speed</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Mouse Clicks</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Mouse Drag</string>
+         </property>
+        </row>
+        <column>
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Select </string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Goto</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Reverse Goto</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>NOP</string>
+         </property>
+        </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>Left</string>
+         </property>
+        </item>
+        <item row="0" column="1">
+         <property name="text">
+          <string>Right</string>
+         </property>
+        </item>
+        <item row="0" column="2">
+         <property name="text">
+          <string>Up</string>
+         </property>
+        </item>
+        <item row="0" column="3">
+         <property name="text">
+          <string>Down</string>
+         </property>
+        </item>
+        <item row="0" column="4">
+         <property name="text">
+          <string>Speed</string>
+         </property>
+        </item>
+        <item row="0" column="5">
+         <property name="text">
+          <string>Drag</string>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>Faster</string>
+         </property>
+        </item>
+        <item row="1" column="1">
+         <property name="text">
+          <string>Slower</string>
+         </property>
+        </item>
+        <item row="1" column="4">
+         <property name="text">
+          <string>Clicks</string>
+         </property>
+        </item>
+        <item row="1" column="5">
+         <property name="text">
+          <string>Move</string>
+         </property>
+        </item>
+        <item row="2" column="0">
+         <property name="text">
+          <string>Click</string>
+         </property>
+        </item>
+        <item row="2" column="1">
+         <property name="text">
+          <string>Double click</string>
+         </property>
+        </item>
+        <item row="2" column="2">
+         <property name="text">
+          <string>Right click</string>
+         </property>
+        </item>
+        <item row="2" column="3">
+         <property name="text">
+          <string>Right dbl click</string>
+         </property>
+        </item>
+        <item row="2" column="4">
+         <property name="text">
+          <string>Drag</string>
+         </property>
+        </item>
+        <item row="2" column="5">
+         <property name="text">
+          <string>Speed</string>
+         </property>
+        </item>
+        <item row="3" column="0">
+         <property name="text">
+          <string>Click + hold</string>
+         </property>
+        </item>
+        <item row="3" column="1">
+         <property name="text">
+          <string>Release click</string>
+         </property>
+        </item>
+        <item row="3" column="2">
+         <property name="text">
+          <string>Right click + hold</string>
+         </property>
+        </item>
+        <item row="3" column="3">
+         <property name="text">
+          <string>Release right click</string>
+         </property>
+        </item>
+        <item row="3" column="4">
+         <property name="text">
+          <string>Movement</string>
+         </property>
+        </item>
+        <item row="3" column="5">
+         <property name="text">
+          <string>Clicks</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Speed (pixels/second)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="speedEdit">
+          <property name="text">
+           <string>10</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>831</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
