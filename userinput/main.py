@@ -15,7 +15,7 @@
 #      along with mindwave-python.  If not, see <http://www.gnu.org/licenses/>.  #
 ##################################################################################
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, Qt
 from mainwindow import Ui_MainWindow
 import mindwave
 from collections import deque
@@ -101,7 +101,8 @@ class MyMainWindow(Ui_MainWindow):
   def update_selection(self):
     self.operationTable.setRangeSelected(QtGui.QTableWidgetSelectionRange(self.row, self.col, self.row, self.col), False)
     try:
-      self.row, self.col, self.clock_divider = self.blink_interpreter.step(int(self.speedEdit.text()), self.clock_divider)
+      self.row, self.col, self.clock_divider, new_speed = self.blink_interpreter.step(int(self.speedEdit.text()), self.clock_divider)
+      self.speedEdit.setText("{0}".format(new_speed))
     except ValueError:
       pass
     self.operationTable.setRangeSelected(QtGui.QTableWidgetSelectionRange(self.row, self.col, self.row, self.col), True)
@@ -123,7 +124,7 @@ class MainWindowWithCustomSignal(QtGui.QMainWindow):
 
   def __init__(self, *args, **kwargs):
     super(MainWindowWithCustomSignal, self).__init__(*args, **kwargs)
-
+#    self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint)
 
 def main():
   import sys

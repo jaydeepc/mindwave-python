@@ -108,14 +108,13 @@ class BlinkInterpreter(object):
         self.handlers[BlinkInterpreter.RIGHT_RELEASE] = self.handle_right_release
 
     def step(self, speed, clock_divider):
-        self.speed = speed
-        clock_divider = self.handlers[self.current_state](clock_divider)
-        return self.row, self.col, clock_divider
+        clock_divider, new_speed = self.handlers[self.current_state](clock_divider, speed)
+        return self.row, self.col, clock_divider, new_speed
 
-    def do_nothing(self, clkdiv):
-        return clkdiv+1 if clkdiv < 3 else 0 
+    def do_nothing(self, clkdiv, speed):
+        return clkdiv+1 if clkdiv < 3 else 0, speed
 
-    def handle_nop(self, clkdiv):
+    def handle_nop(self, clkdiv, speed):
         if clkdiv > 3:
           clkdiv = 0
           if self.col < self.maxcol:
@@ -125,117 +124,125 @@ class BlinkInterpreter(object):
         else:
           clkdiv += 1
 
-        return clkdiv
+        return clkdiv, speed
 
-    def handle_move_left(self, clkdiv):
+    def handle_move_left(self, clkdiv, speed):
         curx, cury = self.mouse.position()
-        self.mouse.move(curx-self.speed, cury)
-        return clkdiv+1 if clkdiv < 3 else 0
+        self.mouse.move(curx-speed, cury)
+        return clkdiv+1 if clkdiv < 3 else 0, speed
 
-    def handle_move_right(self, clkdiv):
+    def handle_move_right(self, clkdiv, speed):
         curx, cury = self.mouse.position()
-        self.mouse.move(curx+self.speed, cury)
-        return clkdiv+1 if clkdiv<3 else 0
+        self.mouse.move(curx+speed, cury)
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_move_up(self, clkdiv):
+    def handle_move_up(self, clkdiv, speed):
         curx, cury = self.mouse.position()
-        self.mouse.move(curx, cury-self.speed)
-        return clkdiv+1 if clkdiv<3 else 0
+        self.mouse.move(curx, cury-speed)
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_move_down(self, clkdiv):
+    def handle_move_down(self, clkdiv, speed):
         curx, cury = self.mouse.position()
-        self.mouse.move(curx, cury+self.speed)
-        return clkdiv+1 if clkdiv<3 else 0
+        self.mouse.move(curx, cury+speed)
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_goto_speed(self, clkdiv):
+    def handle_goto_speed(self, clkdiv, speed):
         self.row = 1
         self.col = 0
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_goto_clicks(self, clkdiv):
+    def handle_goto_clicks(self, clkdiv, speed):
         self.row = 2
         self.col = 0
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_goto_drag(self, clkdiv):
+    def handle_goto_drag(self, clkdiv, speed):
         self.row = 3
         self.col = 0
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_goto_movement(self, clkdiv):
+    def handle_goto_movement(self, clkdiv, speed):
         self.row = 0
         self.col = 0
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_make_faster(self, clkdiv):
-        if self.speed < 100:
-          self.speed += 5
-        return clkdiv+1 if clkdiv<3 else 0
+    def handle_make_faster(self, clkdiv, speed):
+        if clkdiv > 3:
+          clkdiv = 0
+          if speed < 100:
+            speed += 5
+        else:
+          clkdiv+=1
+        return clkdiv, speed
 
-    def handle_make_slower(self, clkdiv):
-        if self.speed > 5:
-          self.speed -= 5
-        return clkdiv+1 if clkdiv<3 else 0
+    def handle_make_slower(self, clkdiv, speed):
+        if clkdiv > 3:
+          clkdiv = 0
+          if speed > 5:
+            speed -= 5
+        else:
+          clkdiv += 1
+        return clkdiv, speed
 
-    def handle_click(self, clkdiv):
+    def handle_click(self, clkdiv, speed):
         curx, cury  = self.mouse.position()
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_double_click(self, clkdiv):
+    def handle_double_click(self, clkdiv, speed):
         curx, cury  = self.mouse.position()
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_right_click(self, clkdiv):
+    def handle_right_click(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_right_double_click(self, clkdiv):
+    def handle_right_double_click(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_click_hold(self, clkdiv):
+    def handle_click_hold(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_release(self, clkdiv):
+    def handle_release(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_right_click_hold(self, clkdiv):
+    def handle_right_click_hold(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
-    def handle_right_release(self, clkdiv):
+    def handle_right_release(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0
+        return clkdiv+1 if clkdiv<3 else 0, speed
 
     def handle_eyeblink(self):
         if self.current_state == BlinkInterpreter.NOP:
