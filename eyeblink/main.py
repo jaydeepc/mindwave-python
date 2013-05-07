@@ -18,12 +18,16 @@
 from PyQt4 import QtCore, QtGui
 from mainwindow import Ui_MainWindow
 import mindwave
+import eyeblinkdetector
 from collections import deque
 import numpy as np
 
 RAW_VAL_WIN_SIZE = 512
 EYEBLINK_WIN_SIZE = 128
 NO_OF_POINTS = 100
+
+def printblink():
+  print "BLINK"
 
 class MyMainWindow(Ui_MainWindow):
 
@@ -50,6 +54,8 @@ class MyMainWindow(Ui_MainWindow):
 
     self.eyeblink_counter = 0
     self.eyeblink_in_progress = False
+    
+    self.eyeblink_detector = eyeblinkdetector.EyeblinkDetector(printblink)
 
   def monitor(self):
     if self.running:
@@ -80,14 +86,8 @@ class MyMainWindow(Ui_MainWindow):
   def check_eyeblink(self, sensitivity, lowfreq, highfreq):
     import pyeeg
     last_128_waves = list(self.last_512_raw_waves)[:EYEBLINK_WIN_SIZE]
-    spectrum, rel_spectrum = pyeeg.bin_power(last_128_waves,[0.5,lowfreq,highfreq,256],512)
     try:
-        if rel_spectrum[1] > float(sensitivity) and not self.eyeblink_in_progress:
-            self.eyeblink_in_progress = True
-            return True
-        elif (rel_spectrum[1] <= float(sensitivity)):
-            self.eyeblink_in_progress = False
-        return False
+      return self.eyeblink_detector.check_eyeblink(sensitivity, lowfreq, highfreq, last_128_waves)
     except ValueError:
         QtGui.QMessageBox.information(self.MainWindow, 'Eye blink sensitivity', 'Invalid eyeblink sensitivity specified. Try 0.45 as a start.', QtGui.QMessageBox.Ok)
     return False
