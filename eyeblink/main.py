@@ -49,6 +49,7 @@ class MyMainWindow(Ui_MainWindow):
     self.counter = 0
 
     self.eyeblink_counter = 0
+    self.eyeblink_in_progress = False
 
   def monitor(self):
     if self.running:
@@ -81,7 +82,12 @@ class MyMainWindow(Ui_MainWindow):
     last_128_waves = list(self.last_512_raw_waves)[:EYEBLINK_WIN_SIZE]
     spectrum, rel_spectrum = pyeeg.bin_power(last_128_waves,[0.5,lowfreq,highfreq,256],512)
     try:
-        return rel_spectrum[1] > float(sensitivity)
+        if rel_spectrum[1] > float(sensitivity) and not self.eyeblink_in_progress:
+            self.eyeblink_in_progress = True
+            return True
+        elif (rel_spectrum[1] <= float(sensitivity)):
+            self.eyeblink_in_progress = False
+        return False
     except ValueError:
         QtGui.QMessageBox.information(self.MainWindow, 'Eye blink sensitivity', 'Invalid eyeblink sensitivity specified. Try 0.45 as a start.', QtGui.QMessageBox.Ok)
     return False
