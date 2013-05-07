@@ -107,6 +107,7 @@ class BlinkInterpreter(object):
         self.handlers[BlinkInterpreter.RIGHT_CLICK_HOLD] = self.handle_right_click_hold
         self.handlers[BlinkInterpreter.RIGHT_RELEASE] = self.handle_right_release
 
+
     def step(self, speed, clock_divider):
         clock_divider, new_speed = self.handlers[self.current_state](clock_divider, speed)
         return self.row, self.col, clock_divider, new_speed
@@ -148,25 +149,21 @@ class BlinkInterpreter(object):
 
     def handle_goto_speed(self, clkdiv, speed):
         self.row = 1
-        self.col = 0
         self.current_state = BlinkInterpreter.NOP
         return clkdiv+1 if clkdiv<3 else 0, speed
 
     def handle_goto_clicks(self, clkdiv, speed):
         self.row = 2
-        self.col = 0
         self.current_state = BlinkInterpreter.NOP
         return clkdiv+1 if clkdiv<3 else 0, speed
 
     def handle_goto_drag(self, clkdiv, speed):
         self.row = 3
-        self.col = 0
         self.current_state = BlinkInterpreter.NOP
         return clkdiv+1 if clkdiv<3 else 0, speed
 
     def handle_goto_movement(self, clkdiv, speed):
         self.row = 0
-        self.col = 0
         self.current_state = BlinkInterpreter.NOP
         return clkdiv+1 if clkdiv<3 else 0, speed
 
@@ -245,7 +242,7 @@ class BlinkInterpreter(object):
         return clkdiv+1 if clkdiv<3 else 0, speed
 
     def handle_eyeblink(self):
-        if self.current_state == BlinkInterpreter.NOP:
+        if self.current_state == BlinkInterpreter.NOP: 
           self.current_state = self.rowcol_to_state[(self.row,self.col)]
           #print "row, col = {0},{1}".format(self.row, self.col)
         else:
