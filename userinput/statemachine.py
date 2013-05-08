@@ -112,8 +112,11 @@ class BlinkInterpreter(object):
         clock_divider, new_speed = self.handlers[self.current_state](clock_divider, speed)
         return self.row, self.col, clock_divider, new_speed
 
+    def updateclkdiv(self, clkdiv):
+        return clkdiv+1 if clkdiv<3 else 0
+
     def do_nothing(self, clkdiv, speed):
-        return clkdiv+1 if clkdiv < 3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_nop(self, clkdiv, speed):
         if clkdiv > 3:
@@ -130,7 +133,7 @@ class BlinkInterpreter(object):
     def handle_move_left(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.move(curx-speed, cury)
-        return clkdiv+1 if clkdiv < 3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_move_right(self, clkdiv, speed):
         curx, cury = self.mouse.position()
@@ -140,32 +143,32 @@ class BlinkInterpreter(object):
     def handle_move_up(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.move(curx, cury-speed)
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_move_down(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.move(curx, cury+speed)
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_goto_speed(self, clkdiv, speed):
         self.row = 1
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_goto_clicks(self, clkdiv, speed):
         self.row = 2
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_goto_drag(self, clkdiv, speed):
         self.row = 3
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_goto_movement(self, clkdiv, speed):
         self.row = 0
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_make_faster(self, clkdiv, speed):
         if clkdiv > 3:
@@ -190,7 +193,7 @@ class BlinkInterpreter(object):
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_double_click(self, clkdiv, speed):
         curx, cury  = self.mouse.position()
@@ -199,14 +202,14 @@ class BlinkInterpreter(object):
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_right_click(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_right_double_click(self, clkdiv, speed):
         curx, cury = self.mouse.position()
@@ -215,31 +218,31 @@ class BlinkInterpreter(object):
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_click_hold(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_release(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.release(curx, cury, LEFT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_right_click_hold(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.press(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_right_release(self, clkdiv, speed):
         curx, cury = self.mouse.position()
         self.mouse.release(curx, cury, RIGHT_BUTTON)
         self.current_state = BlinkInterpreter.NOP
-        return clkdiv+1 if clkdiv<3 else 0, speed
+        return self.updateclkdiv(clkdiv), speed
 
     def handle_eyeblink(self):
         if self.current_state == BlinkInterpreter.NOP: 
