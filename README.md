@@ -14,10 +14,6 @@
       You should have received a copy of the GNU General Public License
       along with mindwave-python.  If not, see <http://www.gnu.org/licenses/>.
                                                                             
-
-
-
-
 mindwave-python
 ===============
 
@@ -193,6 +189,10 @@ Event hooks
 Changelog:
 ==========
 
+- 10 may 2013: remove duplicated module and update README
+- 08 may 2013: more improvements to code quality
+- 07 may 2013: small improvements to code quality
+- 07 may 2013: add proof of concept mind-controlled mouse replacement
 - 05 may 2013: add gplv3 LICENSE
 - 05 may 2013: fft based eye blink detection
 - 05 may 2013: important bug-fixes in the data parser (this breaks the naive eye blink detector)
