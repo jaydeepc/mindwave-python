@@ -39,29 +39,82 @@ class MyMainWindow(Ui_MainWindow):
     self.MainWindow = MainWindow
     
     self.running = False
+
+    # connect signals and slots
     self.startButton.clicked.connect(self.monitor)
     self.rescanMidiButton.clicked.connect(self.rescanMidi)
     self.MainWindow.update_ui_signal.connect(self.update_ui)
-    self.midiDeviceComboBox.currentIndexChanged.connect(self.choose_midi_device)
+    self.midiDeviceComboBoxes = [ 
+        self.midiDevice0ComboBox,
+        self.midiDevice1ComboBox,
+        self.midiDevice2ComboBox,
+        self.midiDevice3ComboBox,
+        self.midiDevice4ComboBox,
+        self.midiDevice5ComboBox,
+        self.midiDevice6ComboBox,
+        self.midiDevice7ComboBox,
+        self.midiDevice8ComboBox,
+        self.midiDevice9ComboBox,
+        self.midiDevice10ComboBox,
+        self.midiDevice11ComboBox,
+        self.midiDevice12ComboBox,
+        self.midiDevice13ComboBox,
+        self.midiDevice14ComboBox,
+        self.midiDevice15ComboBox 
+        ]
+    for i,cb in enumerate(self.midiDeviceComboBoxes):
+      cb.currentIndexChanged.connect(self.choose_midi_device_for_channel(i))
 
+    self.resetButtons = [
+        self.resetChannel0Button,
+        self.resetChannel1Button,
+        self.resetChannel2Button,
+        self.resetChannel3Button,
+        self.resetChannel4Button,
+        self.resetChannel5Button,
+        self.resetChannel6Button,
+        self.resetChannel7Button,
+        self.resetChannel8Button,
+        self.resetChannel9Button,
+        self.resetChannel10Button,
+        self.resetChannel11Button,
+        self.resetChannel12Button,
+        self.resetChannel13Button,
+        self.resetChannel14Button,
+        self.resetChannel15Button
+        ]
+    for i,rb in enumerate(self.resetButtons):
+      rb.clicked.connect(self.reset_button_for_channel(i))
+
+    # provide storage to remember the last 512 raw eeg data points
     self.last_512_raw_waves = deque([0]*RAW_VAL_WIN_SIZE, RAW_VAL_WIN_SIZE)
 
     self.counter = 0
 
+    # reserve a notequeue to remember 3 notes on each channel
     self.notequeue = notequeue.NoteQueue(3)
 
+    # setup eyeblink checker
     self.eyeblink_counter = 0
     self.eyeblink_in_progress = False
     self.eyeblink_detector = eyeblinkdetector.EyeblinkDetector(self.handle_blink_event)
+
+    # make sure the midi device combo boxes are populated
     self.rescanMidi()
 
+
   def monitor(self):
+    """
+    start/stop button
+    """
     if self.running:
+      print "SWITCH OFF"
       self.notequeue.clear_all_notes()
       if self.h:
         self.h.serial_close()
       self.running = False
     else:
+      print "SWITCH ON"
       self.running = True
       self.h = None
       import serial
@@ -80,26 +133,56 @@ class MyMainWindow(Ui_MainWindow):
         self.running = False
 
   def rescanMidi(self):
-    self.midiOut = rtmidi.MidiOut(rtmidi.API_UNIX_JACK)
-    self.available_ports = self.midiOut.get_ports()
-    self.midiDeviceComboBox.clear()
-    for p in self.available_ports:
-      self.midiDeviceComboBox.addItem(p)
+    """
+    list all recognized midi devices
+    """
+    self.midiOut = [rtmidi.MidiOut(rtmidi.API_UNIX_JACK) for i in range(16) ]
+    self.available_ports = self.midiOut[0].get_ports()
+    for midiDeviceComboBox in self.midiDeviceComboBoxes:
+      midiDeviceComboBox.clear()
+      for p in self.available_ports:
+        midiDeviceComboBox.addItem(p)
     if self.available_ports:
-      self.midiOut.open_port(0)
+      for mo in self.midiOut:
+        mo.open_port(0)
 
-  def choose_midi_device(self, index):
-    print "opening midi device ", self.available_ports[index]
-    self.notequeue.clear_all_notes()
-    self.midiOut.close_port()
-    self.midiOut.open_port(index)
+  def choose_midi_device_for_channel(self, channel):
+    """
+    returns a callback function suitable to connect to midi device for channel
+    """
+    def choose_midi_device(index):
+      print "opening midi device ", self.available_ports[index], " for midi channel ", channel
+      msgbytes = self.notequeue.clear_notes(channel)
+      for msg in msgbytes:
+        self.midiOut[channel].send_message(msg)
+      self.midiOut[channel].close_port()
+      self.midiOut[channel].open_port(index)
+    return choose_midi_device
+
+  def reset_button_for_channel(self, channel):
+    """
+    returns a callback function suitable to connect to midi channel reset button
+    """
+    def reset_channel(index):
+      print "clear all notes on channel ", channel, " for the current midi device"
+      msgbytes = self.notequeue.clear_notes(channel)
+      for msg in msgbytes:
+        self.midiOut[channel].send_message(msg)
+    return reset_channel 
 
   def raw_wave_handler(self, headset, value):
+    """
+    callback function that accumulates raw eeg data
+    for each new raw data point, a custom qt signal (update_ui_signal) is emitted
+    """
     self.last_512_raw_waves.pop()
     self.last_512_raw_waves.appendleft(value)
     self.MainWindow.update_ui_signal.emit()
 
   def check_eyeblink(self, sensitivity, lowfreq, highfreq):
+    """
+    function that checks if last 128 raw eeg points contain an eye blink event
+    """
     import pyeeg
     last_128_waves = list(self.last_512_raw_waves)[:EYEBLINK_WIN_SIZE]
     try:
@@ -108,70 +191,122 @@ class MyMainWindow(Ui_MainWindow):
         QtGui.QMessageBox.information(self.MainWindow, 'Eye blink sensitivity', 'Invalid eyeblink sensitivity specified. Try 0.45 as a start.', QtGui.QMessageBox.Ok)
     return False
 
+  def parse_midi_channel_list(self, text):
+    try:
+      ms_split = text.split(",")
+      chans = [ int(i) for i in ms_split ]
+      return chans
+    except ValueError:
+      return []
+
+  def parse_number_ranges(self, text):
+    values = []
+    try:
+      ranges = text.split(",")
+      for rng in ranges:
+        start, stop, step = rng.split(":")
+        start = int(start)
+        stop = int(stop)
+        step = int(step)
+        values.extend( [start+i*step for i in range((stop-start)/step+1)])
+    except ValueError:
+      values = []
+
+    return values
+
   def handle_blink_event(self):
+    """
+    function to do something if an eye blink event is detected
+    """
     if self.eyeBlinkCheckBox.isChecked():
-      import random
-      try:
-        # parse "0,1,2" into [0, 1, 2]
-        ms = self.eyeBlinkMidiChannel.text()
-        ms_split = ms.split(",")
-        midichan = [ int(i) for i in ms_split ]
-      except ValueError:
+      midichan = self.parse_midi_channel_list(self.eyeBlinkMidiChannel.text())
+      if not midichan:
         return
+      values = self.parse_number_ranges(self.eyeBlinkAllowedValueEdit.text())
+      if not values:
+        return
+      vels = self.parse_number_ranges(self.eyeBlinkAllowedVelsEdit.text())
+      if not vels:
+        return
+
+      import random
+      chan = random.choice(midichan)
+      value= random.choice(values)
+      vel  = random.choice(vels)
 
       msgbytes  = self.notequeue.play_note( 
-                    random.choice(midichan), 
-                    random.choice([i+36 for i in range(24)]),
-                    random.choice([i+1 for i in range(126)]))
+                    chan, 
+                    value,
+                    vel)
+
       #print "send midi msg: ", msgbytes
       for msg in msgbytes:
-        self.midiOut.send_message(msg)
+        self.midiOut[chan].send_message(msg)
 
   def handle_meditation_event(self, headset, value):
+    """
+    function to do something when a meditation event is detected
+    """
     if self.meditationCheckBox.isChecked():
-      import random
-      try:
-        # parse "0,1,2" into [0, 1, 2]
-        ms = self.meditationMidiChannel.text()
-        ms_split = ms.split(",")
-        midichan = [ int(i) for i in ms_split ]
-      except ValueError:
+      midichan = self.parse_midi_channel_list(self.meditationMidiChannel.text())
+      if not midichan:
         return
+      vels = self.parse_number_ranges(self.meditationAllowedVelsEdit.text())
+      if not vels:
+        return
+      values = self.parse_number_ranges(self.meditationAllowedValueEdit.text())
+      values.append(value)
 
+      import random
+      chan = random.choice(midichan)
+      value= random.choice(values)
+      vel  = random.choice(vels)
+ 
       #print value
       if value:
         msgbytes  = self.notequeue.play_note( 
-                      random.choice(midichan), 
+                      chan, 
                       value,
-                      random.choice([i+1 for i in range(126)]))
+                      vel)
 
         #print "send midi msg: ", msgbytes
         for msg in msgbytes:
-          self.midiOut.send_message(msg)
+          self.midiOut[chan].send_message(msg)
 
   def handle_attention_event(self, headset, value):
+    """
+    function to do something when an attention event is detected
+    """
     if self.attentionCheckBox.isChecked():
-      import random
-      try:
-        # parse "0,1,2" into [0, 1, 2]
-        ms = self.attentionMidiChannel.text()
-        ms_split = ms.split(",")
-        midichan = [ int(i) for i in ms_split ]
-      except ValueError:
+      midichan = self.parse_midi_channel_list(self.attentionMidiChannel.text())
+      if not midichan:
         return
+      vels = self.parse_number_ranges(self.attentionAllowedVelsEdit.text())
+      if not vels:
+        return
+      values = self.parse_number_ranges(self.attentionAllowedValueEdit.text())
+      values.append(value)
 
+      import random
+      chan = random.choice(midichan)
+      value= random.choice(values)
+      vel  = random.choice(vels)
+ 
       #print value
       if value:
         msgbytes  = self.notequeue.play_note( 
-                      random.choice(midichan), 
+                      chan, 
                       value,
-                      random.choice([i+1 for i in range(126)]))
+                      vel)
 
         #print "send midi msg: ", msgbytes
         for msg in msgbytes:
-          self.midiOut.send_message(msg)
+          self.midiOut[chan].send_message(msg)
 
   def update_ui(self):
+    """
+    triggered whenever a raw eeg data point arrives
+    """
     self.counter += 1
 
     if self.counter % EYEBLINK_WIN_SIZE == 0:
@@ -183,7 +318,12 @@ class MyMainWindow(Ui_MainWindow):
         #print "BLINK {0}".format(self.eyeblink_counter)
 
 class MainWindowWithCustomSignal(QtGui.QMainWindow):
+  """
+  specialized QtGui.MainWindow
 
+  has to be specialized to let it react to a new qt signal
+  (needed to update ui from callback function called from different thread)
+  """
   update_ui_signal = QtCore.pyqtSignal()
 
   def __init__(self, *args, **kwargs):

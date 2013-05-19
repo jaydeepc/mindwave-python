@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>711</width>
-    <height>196</height>
+    <width>859</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,30 +101,6 @@
         </item>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="rescanMidiButton">
-        <property name="text">
-         <string>Rescan midi devices</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Midi device</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="midiDeviceComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
     <item>
@@ -174,20 +150,443 @@
      </layout>
     </item>
     <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Setup channel mapping&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rescanMidiButton">
+        <property name="text">
+         <string>Rescan midi devices</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>MIDI channel 8</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="8">
+       <widget class="QComboBox" name="midiDevice2ComboBox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>MIDI channel 0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="11">
+       <widget class="QComboBox" name="midiDevice3ComboBox"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="midiDevice0ComboBox"/>
+      </item>
+      <item row="2" column="11">
+       <widget class="QComboBox" name="midiDevice7ComboBox"/>
+      </item>
+      <item row="2" column="8">
+       <widget class="QComboBox" name="midiDevice6ComboBox"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>MIDI channel 4</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QComboBox" name="midiDevice8ComboBox"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QComboBox" name="midiDevice4ComboBox"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>MIDI channel 5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QComboBox" name="midiDevice5ComboBox"/>
+      </item>
+      <item row="4" column="6">
+       <widget class="QLabel" name="label_24">
+        <property name="text">
+         <string>MIDI channel 14</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="8">
+       <widget class="QComboBox" name="midiDevice14ComboBox"/>
+      </item>
+      <item row="4" column="9">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>MIDI channel 15</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="11">
+       <widget class="QComboBox" name="midiDevice15ComboBox"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>MIDI channel 9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <widget class="QComboBox" name="midiDevice9ComboBox"/>
+      </item>
+      <item row="3" column="6">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>MIDI channel 10</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="8">
+       <widget class="QComboBox" name="midiDevice10ComboBox"/>
+      </item>
+      <item row="3" column="9">
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>MIDI channel 11</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="11">
+       <widget class="QComboBox" name="midiDevice11ComboBox"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>MIDI channel 12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QComboBox" name="midiDevice12ComboBox"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>MIDI channel 13</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="5">
+       <widget class="QComboBox" name="midiDevice13ComboBox"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>MIDI channel 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="9">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>MIDI channel 7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="9">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>MIDI channel 3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>MIDI channel 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QComboBox" name="midiDevice1ComboBox"/>
+      </item>
+      <item row="2" column="6">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>MIDI channel 6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="resetChannel4Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="resetChannel8Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="resetChannel12Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="resetChannel0Button">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="resetChannel1Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QPushButton" name="resetChannel5Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QPushButton" name="resetChannel9Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QPushButton" name="resetChannel13Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="7">
+       <widget class="QPushButton" name="resetChannel2Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="7">
+       <widget class="QPushButton" name="resetChannel6Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="7">
+       <widget class="QPushButton" name="resetChannel10Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="7">
+       <widget class="QPushButton" name="resetChannel14Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="10">
+       <widget class="QPushButton" name="resetChannel3Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="10">
+       <widget class="QPushButton" name="resetChannel7Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="10">
+       <widget class="QPushButton" name="resetChannel11Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="10">
+       <widget class="QPushButton" name="resetChannel15Button">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>R</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_25">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Setup event mapping&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
-     </spacer>
+     </widget>
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_27">
+        <property name="text">
+         <string>Allowed notes</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QCheckBox" name="attentionCheckBox">
         <property name="text">
@@ -198,18 +597,18 @@
       <item row="0" column="1">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Midi channel</string>
+         <string>Midi channels</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="3">
        <widget class="QLineEdit" name="attentionMidiChannel">
         <property name="text">
          <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="0" column="6">
        <widget class="QComboBox" name="attentionComboBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -269,28 +668,28 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QCheckBox" name="meditationCheckBox">
         <property name="text">
          <string>Meditation</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Midi channel</string>
+         <string>Midi channels</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="2" column="3">
        <widget class="QLineEdit" name="meditationMidiChannel">
         <property name="text">
          <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item row="2" column="6">
        <widget class="QComboBox" name="meditationComboBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -360,28 +759,28 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="4" column="0">
        <widget class="QCheckBox" name="eyeBlinkCheckBox">
         <property name="text">
          <string>Eye blink</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="4" column="1">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Midi channel</string>
+         <string>Midi channels</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="4" column="3">
        <widget class="QLineEdit" name="eyeBlinkMidiChannel">
         <property name="text">
          <string>0</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item row="4" column="6">
        <widget class="QComboBox" name="eyeBlinkComboBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -396,7 +795,118 @@
         </item>
        </widget>
       </item>
+      <item row="3" column="3">
+       <widget class="QLineEdit" name="meditationAllowedValueEdit">
+        <property name="text">
+         <string>24:36:2, 48:72:1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_26">
+        <property name="text">
+         <string>Allowed notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="attentionAllowedValueEdit">
+        <property name="text">
+         <string>1:127:1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_28">
+        <property name="text">
+         <string>Allowed notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QLineEdit" name="eyeBlinkAllowedValueEdit">
+        <property name="text">
+         <string>36:48:1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_32">
+        <property name="text">
+         <string>Allowed vels</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_29">
+        <property name="text">
+         <string>Event type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="label_30">
+        <property name="text">
+         <string>Event type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_31">
+        <property name="text">
+         <string>Event type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QLabel" name="label_33">
+        <property name="text">
+         <string>Allowed vels</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4">
+       <widget class="QLabel" name="label_34">
+        <property name="text">
+         <string>Allowed vels</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QLineEdit" name="attentionAllowedVelsEdit">
+        <property name="text">
+         <string>1:127:1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="6">
+       <widget class="QLineEdit" name="meditationAllowedVelsEdit">
+        <property name="text">
+         <string>1:127:1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="6">
+       <widget class="QLineEdit" name="eyeBlinkAllowedVelsEdit">
+        <property name="text">
+         <string>1:127:1</string>
+        </property>
+       </widget>
+      </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
@@ -405,7 +915,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>711</width>
+     <width>859</width>
      <height>19</height>
     </rect>
    </property>
@@ -427,20 +937,38 @@
  <tabstops>
   <tabstop>startButton</tabstop>
   <tabstop>deviceComboBox</tabstop>
-  <tabstop>rescanMidiButton</tabstop>
-  <tabstop>midiDeviceComboBox</tabstop>
   <tabstop>eyeBlinkSensitivity</tabstop>
   <tabstop>lowerEyeBlinkFrequency</tabstop>
   <tabstop>higherEyeBlinkFrequency</tabstop>
+  <tabstop>rescanMidiButton</tabstop>
+  <tabstop>midiDevice0ComboBox</tabstop>
+  <tabstop>midiDevice1ComboBox</tabstop>
+  <tabstop>midiDevice2ComboBox</tabstop>
+  <tabstop>midiDevice3ComboBox</tabstop>
+  <tabstop>midiDevice4ComboBox</tabstop>
+  <tabstop>midiDevice5ComboBox</tabstop>
+  <tabstop>midiDevice6ComboBox</tabstop>
+  <tabstop>midiDevice7ComboBox</tabstop>
+  <tabstop>midiDevice8ComboBox</tabstop>
+  <tabstop>midiDevice9ComboBox</tabstop>
+  <tabstop>midiDevice10ComboBox</tabstop>
+  <tabstop>midiDevice11ComboBox</tabstop>
+  <tabstop>midiDevice12ComboBox</tabstop>
+  <tabstop>midiDevice13ComboBox</tabstop>
+  <tabstop>midiDevice14ComboBox</tabstop>
+  <tabstop>midiDevice15ComboBox</tabstop>
   <tabstop>attentionCheckBox</tabstop>
   <tabstop>attentionMidiChannel</tabstop>
   <tabstop>attentionComboBox</tabstop>
+  <tabstop>attentionAllowedValueEdit</tabstop>
   <tabstop>meditationCheckBox</tabstop>
   <tabstop>meditationMidiChannel</tabstop>
   <tabstop>meditationComboBox</tabstop>
+  <tabstop>meditationAllowedValueEdit</tabstop>
   <tabstop>eyeBlinkCheckBox</tabstop>
   <tabstop>eyeBlinkMidiChannel</tabstop>
   <tabstop>eyeBlinkComboBox</tabstop>
+  <tabstop>eyeBlinkAllowedValueEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

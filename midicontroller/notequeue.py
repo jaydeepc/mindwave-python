@@ -42,7 +42,6 @@ class NoteQueue(object):
     self.notes_inserted[channel] += 1
     msgbytes.append(self.midimsg.note_on(channel, note, velocity))
     if self.notes_inserted[channel] > self.capacity:
-        assert oldest_note[0]
         msgbytes.append(self.midimsg.note_off(channel, oldest_note[0], oldest_note[1]))
     return msgbytes
 
