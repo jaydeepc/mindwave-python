@@ -109,7 +109,10 @@ class MyMainWindow(Ui_MainWindow):
     """
     if self.running:
       print "SWITCH OFF"
-      self.notequeue.clear_all_notes()
+      for i,mo in enumerate(self.midiOut):
+        bytemsg = self.notequeue.clear_notes(i)
+        for msg in bytemsg:
+          self.midiOut[i].send_message(msg)
       if self.h:
         self.h.serial_close()
       self.running = False
