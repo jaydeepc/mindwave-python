@@ -215,8 +215,7 @@ Serial listener for dongle device.
                     elif code == REQUEST_DENIED:
                         # Request denied
                         for handler in self.headset.request_denied_handlers:
-                            handler(self.headset)
-                        payload.encode('hex')
+                            handler(self.headset, payload.encode('hex'))
 
                     elif code == STANDBY_SCAN:
                         # Standby/Scan mode
