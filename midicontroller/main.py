@@ -44,6 +44,7 @@ class MyMainWindow(Ui_MainWindow):
     self.startButton.clicked.connect(self.monitor)
     self.rescanMidiButton.clicked.connect(self.rescanMidi)
     self.MainWindow.update_ui_signal.connect(self.update_ui)
+    self.MainWindow.update_statusbar_signal.connect(self.update_statusbar)
     self.midiDeviceComboBoxes = [ 
         self.midiDevice0ComboBox,
         self.midiDevice1ComboBox,
@@ -102,13 +103,18 @@ class MyMainWindow(Ui_MainWindow):
     # make sure the midi device combo boxes are populated
     self.rescanMidi()
 
+    # statusbar text elements
+    self.connected = "not connected"
+    self.signal_quality = "unknown signal quality"
+    self.update_statusbar()
 
   def monitor(self):
     """
     start/stop button
     """
     if self.running:
-      print "SWITCH OFF"
+      self.connected = "Not connected"
+      self.signal_quality = "unknown signal quality"
       for i,mo in enumerate(self.midiOut):
         bytemsg = self.notequeue.clear_notes(i)
         for msg in bytemsg:
@@ -117,7 +123,8 @@ class MyMainWindow(Ui_MainWindow):
         self.h.serial_close()
       self.running = False
     else:
-      print "SWITCH ON"
+      self.connected = "Connected"
+      self.signal_quality = "unknown signal quality"
       self.running = True
       self.h = None
       import serial
@@ -132,8 +139,20 @@ class MyMainWindow(Ui_MainWindow):
         self.h.raw_wave_handlers.append(self.raw_wave_handler)
         self.h.meditation_handlers.append(self.handle_meditation_event)
         self.h.attention_handlers.append(self.handle_attention_event)
+        self.h.poor_signal_handlers.append(self.handle_poor_signal)
+        self.h.good_signal_handlers.append(self.handle_good_signal)
       else:
         self.running = False
+
+    self.update_statusbar()
+
+  def handle_poor_signal(self, headset, value):
+    self.signal_quality = "poor signal quality {0}%".format(value)
+    self.MainWindow.update_statusbar_signal.emit()
+
+  def handle_good_signal(self, headset, value):
+    self.signal_quality = "good signal quality"
+    self.MainWindow.update_statusbar_signal.emit()
 
   def rescanMidi(self):
     """
@@ -320,6 +339,9 @@ class MyMainWindow(Ui_MainWindow):
         self.eyeblink_counter += 1
         #print "BLINK {0}".format(self.eyeblink_counter)
 
+  def update_statusbar(self):
+    self.statusbar.showMessage("{0} - {1}".format(self.connected,self.signal_quality))
+
 class MainWindowWithCustomSignal(QtGui.QMainWindow):
   """
   specialized QtGui.MainWindow
@@ -328,6 +350,7 @@ class MainWindowWithCustomSignal(QtGui.QMainWindow):
   (needed to update ui from callback function called from different thread)
   """
   update_ui_signal = QtCore.pyqtSignal()
+  update_statusbar_signal = QtCore.pyqtSignal()
 
   def __init__(self, *args, **kwargs):
     super(MainWindowWithCustomSignal, self).__init__(*args, **kwargs)
