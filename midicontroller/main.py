@@ -108,6 +108,15 @@ class MyMainWindow(Ui_MainWindow):
     self.signal_quality = "unknown signal quality"
     self.update_statusbar()
 
+    self.actionQuit.triggered.connect(QtGui.qApp.quit)
+
+  def quit_gracefully(self):
+    msgbytes = self.note_queue.clear_all_notes()
+    for i,mo in enumerate(self.midiOut):
+      bytemsg = self.notequeue.clear_notes(i)
+      for msg in bytemsg:
+        self.midiOut[i].send_message(msg)
+
   def monitor(self):
     """
     start/stop button
@@ -205,7 +214,6 @@ class MyMainWindow(Ui_MainWindow):
     """
     function that checks if last 128 raw eeg points contain an eye blink event
     """
-    import pyeeg
     last_128_waves = list(self.last_512_raw_waves)[:EYEBLINK_WIN_SIZE]
     try:
       return self.eyeblink_detector.check_eyeblink(sensitivity, lowfreq, highfreq, last_128_waves)
