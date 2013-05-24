@@ -224,6 +224,9 @@ class MyMainWindow(Ui_MainWindow):
     return False
 
   def parse_midi_channel_list(self, text):
+    """
+    parse "1,2 , 3, 4 ,5" into [1,2,3,4,5]
+    """
     try:
       ms_split = text.split(",")
       chans = [ int(i) for i in ms_split ]
@@ -232,6 +235,9 @@ class MyMainWindow(Ui_MainWindow):
       return []
 
   def parse_number_ranges(self, text):
+    """
+    parse "4:8:2, a4:c#5:2" into [4,6,8,69,71,73]
+    """
     values = []
     try:
       ranges = text.split(",")

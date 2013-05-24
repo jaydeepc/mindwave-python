@@ -49,3 +49,4 @@ if __name__ == "__main__":
   assert n.lookup("Bbb4") == 69
   assert n.lookup("bbb4") == 69
   assert n.lookup("6") == 6
+  print n.lookup("c#5") 
