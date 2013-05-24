@@ -22,6 +22,7 @@ import eyeblinkdetector
 from collections import deque
 import rtmidi
 import notequeue
+import notelookup
 
 RAW_VAL_WIN_SIZE = 512
 EYEBLINK_WIN_SIZE = 128
@@ -108,10 +109,11 @@ class MyMainWindow(Ui_MainWindow):
     self.signal_quality = "unknown signal quality"
     self.update_statusbar()
 
+    self.notelookup = notelookup.NoteLookup()
+
     self.actionQuit.triggered.connect(QtGui.qApp.quit)
 
   def quit_gracefully(self):
-    msgbytes = self.note_queue.clear_all_notes()
     for i,mo in enumerate(self.midiOut):
       bytemsg = self.notequeue.clear_notes(i)
       for msg in bytemsg:
@@ -234,11 +236,20 @@ class MyMainWindow(Ui_MainWindow):
     try:
       ranges = text.split(",")
       for rng in ranges:
-        start, stop, step = rng.split(":")
-        start = int(start)
-        stop = int(stop)
-        step = int(step)
-        values.extend( [start+i*step for i in range((stop-start)/step+1)])
+        colon_split = rng.split(":")
+        start = None
+        stop = None
+        step = 1
+        if len(colon_split) == 3:
+          start = self.notelookup.lookup(colon_split[0])
+          stop = self.notelookup.lookup(colon_split[1])
+          step = int(colon_split[2])
+        elif len(colon_split) == 1:
+          start = self.notelookup.lookup(colon_split[0])
+          stop = start
+          step = 1
+        if start is not None and stop is not None:
+          values.extend( [start+i*step for i in range((stop-start)/step+1)])
     except ValueError:
       values = []
 
