@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Sun May 19 23:16:34 2013
+# Created: Mon May 20 13:19:38 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -395,14 +395,23 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuState = QtGui.QMenu(self.menubar)
+        self.menuState.setObjectName(_fromUtf8("menuState"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         MainWindow.setStatusBar(self.statusbar)
         self.actionQuit = QtGui.QAction(MainWindow)
         self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
+        self.actionSave_state = QtGui.QAction(MainWindow)
+        self.actionSave_state.setObjectName(_fromUtf8("actionSave_state"))
+        self.actionLoad_state = QtGui.QAction(MainWindow)
+        self.actionLoad_state.setObjectName(_fromUtf8("actionLoad_state"))
         self.menuFile.addAction(self.actionQuit)
+        self.menuState.addAction(self.actionSave_state)
+        self.menuState.addAction(self.actionLoad_state)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuState.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -545,7 +554,10 @@ class Ui_MainWindow(object):
         self.meditationAllowedVelsEdit.setText(_translate("MainWindow", "1:127:1", None))
         self.eyeBlinkAllowedVelsEdit.setText(_translate("MainWindow", "1:127:1", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuState.setTitle(_translate("MainWindow", "State", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionSave_state.setText(_translate("MainWindow", "Save state", None))
+        self.actionLoad_state.setText(_translate("MainWindow", "Load state", None))
 
 
 if __name__ == "__main__":

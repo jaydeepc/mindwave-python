@@ -23,6 +23,7 @@ from collections import deque
 import rtmidi
 import notequeue
 import notelookup
+import simpleserializer
 
 RAW_VAL_WIN_SIZE = 512
 EYEBLINK_WIN_SIZE = 128
@@ -112,6 +113,72 @@ class MyMainWindow(Ui_MainWindow):
     self.notelookup = notelookup.NoteLookup()
 
     self.actionQuit.triggered.connect(QtGui.qApp.quit)
+    self.actionSave_state.triggered.connect(self.save_state)
+    self.actionLoad_state.triggered.connect(self.load_state)
+
+    self.setup_serialization()
+
+  def setup_serialization(self):
+
+    def lineedit_getter(lineedit):
+      return "{0}".format(lineedit.text())
+
+    def lineedit_setter(lineedit, value):
+      lineedit.setText(value)
+
+    def checkbox_getter(checkbox):
+      return checkbox.isChecked()
+
+    def checkbox_setter(checkbox, value):
+      checkbox.setChecked(value)
+
+    def combobox_getter(combobox):
+      return "{0}".format(combobox.currentText())
+
+    def combobox_setter(combobox, value):
+      idx = combobox.findText(value)
+      if idx != -1:
+        combobox.setCurrentIndex(idx);
+      else:
+        print "Warning: couldn't restore combobox to value ", value
+
+    self.serializer = simpleserializer.SimpleSerializer()
+    self.serializer.register("deviceComboBox", self.deviceComboBox, combobox_getter, combobox_setter)
+    self.serializer.register("eyeBlinkSensitivity", self.eyeBlinkSensitivity, lineedit_getter, lineedit_setter)
+    self.serializer.register("lowerEyeBlinkFrequency", self.lowerEyeBlinkFrequency, lineedit_getter, lineedit_setter)
+    self.serializer.register("higherEyeBlinkFrequency", self.higherEyeBlinkFrequency, lineedit_getter, lineedit_setter)
+    for i,cb in enumerate(self.midiDeviceComboBoxes):
+      self.serializer.register("midiDevice{0}ComboBox".format(i), cb, combobox_getter, combobox_setter)
+
+    self.serializer.register("attentionCheckBox", self.attentionCheckBox, checkbox_getter, checkbox_setter)
+    self.serializer.register("attentionMidiChannel", self.attentionMidiChannel, lineedit_getter, lineedit_setter)
+    self.serializer.register("attentionComboBox", self.attentionComboBox, combobox_getter, combobox_setter)
+    self.serializer.register("attentionAllowedValueEdit", self.attentionAllowedValueEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("attentionAllowedVelsEdit", self.attentionAllowedVelsEdit, lineedit_getter, lineedit_setter)
+
+    self.serializer.register("meditationCheckBox", self.meditationCheckBox, checkbox_getter, checkbox_setter)
+    self.serializer.register("meditationMidiChannel", self.meditationMidiChannel, lineedit_getter, lineedit_setter)
+    self.serializer.register("meditationComboBox", self.meditationComboBox, combobox_getter, combobox_setter)
+    self.serializer.register("meditationAllowedValueEdit", self.meditationAllowedValueEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("meditationAllowedVelsEdit", self.meditationAllowedVelsEdit, lineedit_getter, lineedit_setter)
+
+    self.serializer.register("eyeBlinkCheckBox", self.eyeBlinkCheckBox, checkbox_getter, checkbox_setter)
+    self.serializer.register("eyeBlinkMidiChannel", self.eyeBlinkMidiChannel, lineedit_getter, lineedit_setter)
+    self.serializer.register("eyeBlinkComboBox", self.eyeBlinkComboBox, combobox_getter, combobox_setter)
+    self.serializer.register("eyeBlinkAllowedValueEdit", self.eyeBlinkAllowedValueEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("eyeBlinkAllowedVelsEdit", self.eyeBlinkAllowedVelsEdit, lineedit_getter, lineedit_setter)
+
+  def save_state(self):
+    self.serializer.ui_to_model()
+    modelstring = self.serializer.to_string()
+    with open("midicontroller-state.json", "w") as f:
+      f.write(modelstring)
+
+  def load_state(self):
+    with open("midicontroller-state.json", "r") as f:
+      modelstring = f.read()
+    self.serializer.from_string(modelstring)
+    self.serializer.model_to_ui()
 
   def quit_gracefully(self):
     for i,mo in enumerate(self.midiOut):
