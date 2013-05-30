@@ -25,6 +25,7 @@ import notequeue
 import notelookup
 import simpleserializer
 
+
 RAW_VAL_WIN_SIZE = 512
 EYEBLINK_WIN_SIZE = 128
 NO_OF_POINTS = 100
@@ -118,6 +119,8 @@ class MyMainWindow(Ui_MainWindow):
 
     self.setup_serialization()
 
+    self.setup_plugins()
+
   def setup_serialization(self):
 
     def lineedit_getter(lineedit):
@@ -151,22 +154,58 @@ class MyMainWindow(Ui_MainWindow):
       self.serializer.register("midiDevice{0}ComboBox".format(i), cb, combobox_getter, combobox_setter)
 
     self.serializer.register("attentionCheckBox", self.attentionCheckBox, checkbox_getter, checkbox_setter)
-    self.serializer.register("attentionMidiChannel", self.attentionMidiChannel, lineedit_getter, lineedit_setter)
-    self.serializer.register("attentionComboBox", self.attentionComboBox, combobox_getter, combobox_setter)
-    self.serializer.register("attentionAllowedValueEdit", self.attentionAllowedValueEdit, lineedit_getter, lineedit_setter)
-    self.serializer.register("attentionAllowedVelsEdit", self.attentionAllowedVelsEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("attentionPluginComboBox", self.attentionPluginComboBox, combobox_getter, combobox_setter)
 
     self.serializer.register("meditationCheckBox", self.meditationCheckBox, checkbox_getter, checkbox_setter)
-    self.serializer.register("meditationMidiChannel", self.meditationMidiChannel, lineedit_getter, lineedit_setter)
-    self.serializer.register("meditationComboBox", self.meditationComboBox, combobox_getter, combobox_setter)
-    self.serializer.register("meditationAllowedValueEdit", self.meditationAllowedValueEdit, lineedit_getter, lineedit_setter)
-    self.serializer.register("meditationAllowedVelsEdit", self.meditationAllowedVelsEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("meditationPluginComboBox", self.meditationPluginComboBox, combobox_getter, combobox_setter)
 
     self.serializer.register("eyeBlinkCheckBox", self.eyeBlinkCheckBox, checkbox_getter, checkbox_setter)
-    self.serializer.register("eyeBlinkMidiChannel", self.eyeBlinkMidiChannel, lineedit_getter, lineedit_setter)
-    self.serializer.register("eyeBlinkComboBox", self.eyeBlinkComboBox, combobox_getter, combobox_setter)
-    self.serializer.register("eyeBlinkAllowedValueEdit", self.eyeBlinkAllowedValueEdit, lineedit_getter, lineedit_setter)
-    self.serializer.register("eyeBlinkAllowedVelsEdit", self.eyeBlinkAllowedVelsEdit, lineedit_getter, lineedit_setter)
+    self.serializer.register("eyeBlinkPluginComboBox",self.eyeBlinkPluginComboBox, combobox_getter, combobox_setter)
+
+  def setup_plugins(self):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    from getinstallpath import getInstallPath
+    import os.path
+    places = [ os.path.join(getInstallPath(), "midicontroller/plugins/scoregenerators") ]
+    manager.setPluginPlaces(places)
+    manager.locatePlugins()
+    manager.loadPlugins()
+    print "Discovered the following plugins:"
+    for plugin in manager.getAllPlugins():
+      n = plugin.plugin_object.name
+      print n
+      self.attentionPluginComboBox.addItem(n)
+      self.meditationPluginComboBox.addItem(n)
+      self.eyeBlinkPluginComboBox.addItem(n)
+
+    self.attentionPluginComboBox.currentIndexChanged.connect(self.attentionPluginSelected)
+    self.meditationPluginComboBox.currentIndexChanged.connect(self.meditationPluginSelected)
+    self.eyeBlinkPluginComboBox.currentIndexChanged.connect(self.eyeBlinkPluginSelected)
+    self.attentionPluginSelected(0)
+    self.meditationPluginSelected(0)
+    self.eyeBlinkPluginSelected(0)
+  
+  def attentionPluginSelected(self, index):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[index]
+    self.attentionPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "attention")
+    self.gridLayout.addWidget(self.attentionPluginWidget, 1, 0)
+
+  def meditationPluginSelected(self, index):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[index]
+    self.meditationPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "meditation")
+    self.gridLayout.addWidget(self.meditationPluginWidget, 3, 0)
+
+  def eyeBlinkPluginSelected(self, index):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[index]
+    self.eyeBlinkPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "eyeblink")
+    self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
 
   def save_state(self):
     self.serializer.ui_to_model()
@@ -190,6 +229,7 @@ class MyMainWindow(Ui_MainWindow):
     """
     start/stop button
     """
+    print "monitor"
     if self.running:
       self.connected = "Not connected"
       self.signal_quality = "unknown signal quality"
@@ -290,132 +330,36 @@ class MyMainWindow(Ui_MainWindow):
         QtGui.QMessageBox.information(self.MainWindow, 'Eye blink sensitivity', 'Invalid eyeblink sensitivity specified. Try 0.45 as a start.', QtGui.QMessageBox.Ok)
     return False
 
-  def parse_midi_channel_list(self, text):
-    """
-    parse "1,2 , 3, 4 ,5" into [1,2,3,4,5]
-    """
-    try:
-      ms_split = text.split(",")
-      chans = [ int(i) for i in ms_split ]
-      return chans
-    except ValueError:
-      return []
-
-  def parse_number_ranges(self, text):
-    """
-    parse "4:8:2, a4:c#5:2" into [4,6,8,69,71,73]
-    """
-    values = []
-    try:
-      ranges = text.split(",")
-      for rng in ranges:
-        colon_split = rng.split(":")
-        start = None
-        stop = None
-        step = 1
-        if len(colon_split) == 3:
-          start = self.notelookup.lookup(colon_split[0])
-          stop = self.notelookup.lookup(colon_split[1])
-          step = int(colon_split[2])
-        elif len(colon_split) == 1:
-          start = self.notelookup.lookup(colon_split[0])
-          stop = start
-          step = 1
-        if start is not None and stop is not None:
-          values.extend( [start+i*step for i in range((stop-start)/step+1)])
-    except ValueError:
-      values = []
-
-    return values
-
   def handle_blink_event(self):
     """
     function to do something if an eye blink event is detected
     """
     if self.eyeBlinkCheckBox.isChecked():
-      midichan = self.parse_midi_channel_list(self.eyeBlinkMidiChannel.text())
-      if not midichan:
-        return
-      values = self.parse_number_ranges(self.eyeBlinkAllowedValueEdit.text())
-      if not values:
-        return
-      vels = self.parse_number_ranges(self.eyeBlinkAllowedVelsEdit.text())
-      if not vels:
-        return
-
-      import random
-      chan = random.choice(midichan)
-      value= random.choice(values)
-      vel  = random.choice(vels)
-
-      msgbytes  = self.notequeue.play_note( 
-                    chan, 
-                    value,
-                    vel)
-
-      #print "send midi msg: ", msgbytes
-      for msg in msgbytes:
-        self.midiOut[chan].send_message(msg)
-
+      from yapsy.PluginManager import PluginManagerSingleton
+      manager = PluginManagerSingleton.get()
+      plugin = manager.getAllPlugins()[self.eyeBlinkPluginComboBox.currentIndex()]
+      plugin.plugin_object.trigger("eyeblink", self.midiOut, self.notequeue, None)
+ 
   def handle_meditation_event(self, headset, value):
     """
     function to do something when a meditation event is detected
     """
     if self.meditationCheckBox.isChecked():
-      midichan = self.parse_midi_channel_list(self.meditationMidiChannel.text())
-      if not midichan:
-        return
-      vels = self.parse_number_ranges(self.meditationAllowedVelsEdit.text())
-      if not vels:
-        return
-      values = self.parse_number_ranges(self.meditationAllowedValueEdit.text())
-      values.append(value)
-
-      import random
-      chan = random.choice(midichan)
-      value= random.choice(values)
-      vel  = random.choice(vels)
- 
-      #print value
-      if value:
-        msgbytes  = self.notequeue.play_note( 
-                      chan, 
-                      value,
-                      vel)
-
-        #print "send midi msg: ", msgbytes
-        for msg in msgbytes:
-          self.midiOut[chan].send_message(msg)
+      from yapsy.PluginManager import PluginManagerSingleton
+      manager = PluginManagerSingleton.get()
+      plugin = manager.getAllPlugins()[self.meditationPluginComboBox.currentIndex()]
+      plugin.plugin_object.trigger("meditation", self.midiOut, self.notequeue, None)
 
   def handle_attention_event(self, headset, value):
     """
     function to do something when an attention event is detected
     """
     if self.attentionCheckBox.isChecked():
-      midichan = self.parse_midi_channel_list(self.attentionMidiChannel.text())
-      if not midichan:
-        return
-      vels = self.parse_number_ranges(self.attentionAllowedVelsEdit.text())
-      if not vels:
-        return
-      values = self.parse_number_ranges(self.attentionAllowedValueEdit.text())
-      values.append(value)
+      from yapsy.PluginManager import PluginManagerSingleton
+      manager = PluginManagerSingleton.get()
+      plugin = manager.getAllPlugins()[self.attentionPluginComboBox.currentIndex()]
+      plugin.plugin_object.trigger("attention", self.midiOut, self.notequeue, None)
 
-      import random
-      chan = random.choice(midichan)
-      value= random.choice(values)
-      vel  = random.choice(vels)
- 
-      #print value
-      if value:
-        msgbytes  = self.notequeue.play_note( 
-                      chan, 
-                      value,
-                      vel)
-
-        #print "send midi msg: ", msgbytes
-        for msg in msgbytes:
-          self.midiOut[chan].send_message(msg)
 
   def update_ui(self):
     """

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Panel</class>
+ <widget class="QWidget" name="Panel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>64</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Midi channels</string>
+     </property>
+     <property name="buddy">
+      <cstring>midiChannelEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="midiChannelEdit">
+     <property name="text">
+      <string>0,2,3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Allowed vels</string>
+     </property>
+     <property name="buddy">
+      <cstring>allowedVelsEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLineEdit" name="allowedVelsEdit">
+     <property name="text">
+      <string>80:120:10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Allowed notes</string>
+     </property>
+     <property name="buddy">
+      <cstring>allowedNotesEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="allowedNotesEdit">
+     <property name="text">
+      <string>60:72:2, C4:C5:1</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>midiChannelEdit</tabstop>
+  <tabstop>allowedVelsEdit</tabstop>
+  <tabstop>allowedNotesEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

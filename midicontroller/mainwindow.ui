@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>859</width>
-    <height>468</height>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,7 +198,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_14">
         <property name="text">
-         <string>MIDI channel 8</string>
+         <string>MIDI chan 8</string>
         </property>
        </widget>
       </item>
@@ -208,7 +208,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>MIDI channel 0</string>
+         <string>MIDI chan 0</string>
         </property>
        </widget>
       </item>
@@ -227,7 +227,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_11">
         <property name="text">
-         <string>MIDI channel 4</string>
+         <string>MIDI chan 4</string>
         </property>
        </widget>
       </item>
@@ -240,7 +240,7 @@
       <item row="2" column="3">
        <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>MIDI channel 5</string>
+         <string>MIDI chan 5</string>
         </property>
        </widget>
       </item>
@@ -250,7 +250,7 @@
       <item row="4" column="6">
        <widget class="QLabel" name="label_24">
         <property name="text">
-         <string>MIDI channel 14</string>
+         <string>MIDI chan 14</string>
         </property>
        </widget>
       </item>
@@ -260,7 +260,7 @@
       <item row="4" column="9">
        <widget class="QLabel" name="label_23">
         <property name="text">
-         <string>MIDI channel 15</string>
+         <string>MIDI chan 15</string>
         </property>
        </widget>
       </item>
@@ -270,7 +270,7 @@
       <item row="3" column="3">
        <widget class="QLabel" name="label_13">
         <property name="text">
-         <string>MIDI channel 9</string>
+         <string>MIDI chan 9</string>
         </property>
        </widget>
       </item>
@@ -280,7 +280,7 @@
       <item row="3" column="6">
        <widget class="QLabel" name="label_22">
         <property name="text">
-         <string>MIDI channel 10</string>
+         <string>MIDI chan 10</string>
         </property>
        </widget>
       </item>
@@ -290,7 +290,7 @@
       <item row="3" column="9">
        <widget class="QLabel" name="label_21">
         <property name="text">
-         <string>MIDI channel 11</string>
+         <string>MIDI chan 11</string>
         </property>
        </widget>
       </item>
@@ -300,7 +300,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
-         <string>MIDI channel 12</string>
+         <string>MIDI chan 12</string>
         </property>
        </widget>
       </item>
@@ -310,7 +310,7 @@
       <item row="4" column="3">
        <widget class="QLabel" name="label_16">
         <property name="text">
-         <string>MIDI channel 13</string>
+         <string>MIDI chan 13</string>
         </property>
        </widget>
       </item>
@@ -320,28 +320,28 @@
       <item row="1" column="3">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>MIDI channel 1</string>
+         <string>MIDI chan 1</string>
         </property>
        </widget>
       </item>
       <item row="2" column="9">
        <widget class="QLabel" name="label_19">
         <property name="text">
-         <string>MIDI channel 7</string>
+         <string>MIDI chan 7</string>
         </property>
        </widget>
       </item>
       <item row="1" column="9">
        <widget class="QLabel" name="label_18">
         <property name="text">
-         <string>MIDI channel 3</string>
+         <string>MIDI chan 3</string>
         </property>
        </widget>
       </item>
       <item row="1" column="6">
        <widget class="QLabel" name="label_17">
         <property name="text">
-         <string>MIDI channel 2</string>
+         <string>MIDI chan 2</string>
         </property>
        </widget>
       </item>
@@ -351,7 +351,7 @@
       <item row="2" column="6">
        <widget class="QLabel" name="label_20">
         <property name="text">
-         <string>MIDI channel 6</string>
+         <string>MIDI chan 6</string>
         </property>
        </widget>
       </item>
@@ -580,318 +580,109 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_27">
-        <property name="text">
-         <string>Allowed notes</string>
+      <item row="3" column="0">
+       <widget class="QWidget" name="meditationPluginWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QCheckBox" name="meditationCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Meditation</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="meditationPluginComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>4</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QCheckBox" name="eyeBlinkCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Eye blink</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="eyeBlinkPluginComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>4</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="0">
+       <widget class="QWidget" name="eyeBlinkPluginWidget" native="true"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QWidget" name="attentionPluginWidget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QCheckBox" name="attentionCheckBox">
-        <property name="text">
-         <string>Attention</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Midi channels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLineEdit" name="attentionMidiChannel">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QComboBox" name="attentionComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <property name="text">
-          <string>Note on</string>
-         </property>
+         <widget class="QCheckBox" name="attentionCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Attention</string>
+          </property>
+         </widget>
         </item>
         <item>
-         <property name="text">
-          <string>Pitch bend</string>
-         </property>
+         <widget class="QComboBox" name="attentionPluginComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>4</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>General purpose 1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 3</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 4</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 5</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 6</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 7</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 8</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="meditationCheckBox">
-        <property name="text">
-         <string>Meditation</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Midi channels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QLineEdit" name="meditationMidiChannel">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6">
-       <widget class="QComboBox" name="meditationComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text">
-          <string>Note on</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pitch bend</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 3</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 4</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 5</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 6</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 7</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 8</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 9</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>General purpose 10</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="eyeBlinkCheckBox">
-        <property name="text">
-         <string>Eye blink</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Midi channels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QLineEdit" name="eyeBlinkMidiChannel">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="6">
-       <widget class="QComboBox" name="eyeBlinkComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text">
-          <string>Note on</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QLineEdit" name="meditationAllowedValueEdit">
-        <property name="text">
-         <string>24:36:2, 48:72:1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_26">
-        <property name="text">
-         <string>Allowed notes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLineEdit" name="attentionAllowedValueEdit">
-        <property name="text">
-         <string>1:127:1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_28">
-        <property name="text">
-         <string>Allowed notes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="QLineEdit" name="eyeBlinkAllowedValueEdit">
-        <property name="text">
-         <string>36:48:1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_32">
-        <property name="text">
-         <string>Allowed vels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="label_29">
-        <property name="text">
-         <string>Event type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="4">
-       <widget class="QLabel" name="label_30">
-        <property name="text">
-         <string>Event type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="4">
-       <widget class="QLabel" name="label_31">
-        <property name="text">
-         <string>Event type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4">
-       <widget class="QLabel" name="label_33">
-        <property name="text">
-         <string>Allowed vels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="4">
-       <widget class="QLabel" name="label_34">
-        <property name="text">
-         <string>Allowed vels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <widget class="QLineEdit" name="attentionAllowedVelsEdit">
-        <property name="text">
-         <string>1:127:1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="6">
-       <widget class="QLineEdit" name="meditationAllowedVelsEdit">
-        <property name="text">
-         <string>1:127:1</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="6">
-       <widget class="QLineEdit" name="eyeBlinkAllowedVelsEdit">
-        <property name="text">
-         <string>1:127:1</string>
-        </property>
-       </widget>
+       </layout>
       </item>
      </layout>
     </item>
@@ -953,7 +744,6 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>startButton</tabstop>
   <tabstop>deviceComboBox</tabstop>
   <tabstop>eyeBlinkSensitivity</tabstop>
   <tabstop>lowerEyeBlinkFrequency</tabstop>
@@ -975,18 +765,6 @@
   <tabstop>midiDevice13ComboBox</tabstop>
   <tabstop>midiDevice14ComboBox</tabstop>
   <tabstop>midiDevice15ComboBox</tabstop>
-  <tabstop>attentionCheckBox</tabstop>
-  <tabstop>attentionMidiChannel</tabstop>
-  <tabstop>attentionComboBox</tabstop>
-  <tabstop>attentionAllowedValueEdit</tabstop>
-  <tabstop>meditationCheckBox</tabstop>
-  <tabstop>meditationMidiChannel</tabstop>
-  <tabstop>meditationComboBox</tabstop>
-  <tabstop>meditationAllowedValueEdit</tabstop>
-  <tabstop>eyeBlinkCheckBox</tabstop>
-  <tabstop>eyeBlinkMidiChannel</tabstop>
-  <tabstop>eyeBlinkComboBox</tabstop>
-  <tabstop>eyeBlinkAllowedValueEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -1,0 +1,10 @@
+[Core]
+Name = Simple Generator
+Module = simplegenerator
+
+[Documentation]
+Author = Stefaan Himpe
+Version = 0.1
+Website = https:/github.com/shimpe/mindwave-python
+Description = Simple midi note generator
+
