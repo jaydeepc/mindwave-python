@@ -45,6 +45,23 @@ class SimpleGenerator(IPlugin):
     self.instances[name] = ui 
     return Panel
 
+  def get_state_as_dict(self):
+    result = {}
+    for name in self.instances:
+      Panel = self.instances[name]
+      result[name] = {}
+      result[name]["midiChannelEdit"] = "{0}".format(Panel.midiChannelEdit.text())
+      result[name]["allowedVelsEdit"] = "{0}".format(Panel.allowedVelsEdit.text())
+      result[name]["allowedNotesEdit"] = "{0}".format(Panel.allowedNotesEdit.text())
+    return result
+
+  def set_state_from_dict(self, dct):
+    for name in dct:
+      Panel = self.instances[name]
+      Panel.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
+      Panel.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
+      Panel.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
+
   def trigger(self, name, midiOuts, notequeue, value):
     Panel = self.instances[name]
     print Panel.midiChannelEdit.text()

@@ -208,16 +208,34 @@ class MyMainWindow(Ui_MainWindow):
     self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
 
   def save_state(self):
-    self.serializer.ui_to_model()
-    modelstring = self.serializer.to_string()
+    model = self.serializer.ui_to_model()
+    plugin_model = {}
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    for plugin in manager.getAllPlugins():
+      name = plugin.plugin_object.name
+      plugin_model[name] = plugin.plugin_object.get_state_as_dict()
+    model['plugins'] = plugin_model
+    import json
+    modelstring = json.dumps(model, sort_keys=True,
+                              indent=4, separators=(",",": "))
     with open("midicontroller-state.json", "w") as f:
       f.write(modelstring)
 
   def load_state(self):
     with open("midicontroller-state.json", "r") as f:
       modelstring = f.read()
-    self.serializer.from_string(modelstring)
-    self.serializer.model_to_ui()
+    import json
+    model = json.loads(modelstring)
+    plugin_model = model['plugins']
+    del model['plugins']
+    self.serializer.model_to_ui(model)
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    for plugin in manager.getAllPlugins():
+      name = plugin.plugin_object.name
+      plugin_model[name] = plugin.plugin_object.set_state_from_dict(plugin_model[name])
+    
 
   def quit_gracefully(self):
     for i,mo in enumerate(self.midiOut):

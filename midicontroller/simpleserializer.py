@@ -37,21 +37,13 @@ class SimpleSerializer(object):
     for name in self.objs:
       control, getvalue, setvalue = self.objs[name]
       self.model[name] = getvalue(control)
+    return self.model
 
-  def model_to_ui(self):
+  def model_to_ui(self, model):
     """
     update ui from internal model
     """
     for name in self.objs:
       control, getvalue, setvalue = self.objs[name]
-      setvalue(control, self.model[name])
-
-  def to_string(self):
-    import json
-    return json.dumps(self.model, sort_keys=True,
-                      indent=4, separators=(',', ': '))
-
-  def from_string(self, string):
-    import json
-    self.model = json.loads(string)
+      setvalue(control, model[name])
 
