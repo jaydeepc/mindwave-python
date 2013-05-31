@@ -163,6 +163,10 @@ class MyMainWindow(Ui_MainWindow):
     self.serializer.register("eyeBlinkPluginComboBox",self.eyeBlinkPluginComboBox, combobox_getter, combobox_setter)
 
   def setup_plugins(self):
+    self.prevAttentionPluginIndex = 0
+    self.prevMeditationPluginIndex = 0
+    self.prevEyeBlinkPluginIndex = 0
+ 
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     from getinstallpath import getInstallPath
@@ -189,21 +193,33 @@ class MyMainWindow(Ui_MainWindow):
   def attentionPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
+    plugin.plugin_object.stop('attention')
+    self.prevAttentionPluginIndex = index
     plugin = manager.getAllPlugins()[index]
+    self.attentionPluginWidget.setParent(None)
     self.attentionPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "attention")
     self.gridLayout.addWidget(self.attentionPluginWidget, 1, 0)
 
   def meditationPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
+    plugin.plugin_object.stop('meditation')
+    self.prevMeditationPluginIndex = index
     plugin = manager.getAllPlugins()[index]
+    self.meditationPluginWidget.setParent(None)
     self.meditationPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "meditation")
     self.gridLayout.addWidget(self.meditationPluginWidget, 3, 0)
 
   def eyeBlinkPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
+    plugin.plugin_object.stop('eyeblink')
+    self.prevEyeBlinkPluginIndex = index
     plugin = manager.getAllPlugins()[index]
+    self.eyeBlinkPluginWidget.setParent(None)
     self.eyeBlinkPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "eyeblink")
     self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
 
@@ -366,7 +382,7 @@ class MyMainWindow(Ui_MainWindow):
       from yapsy.PluginManager import PluginManagerSingleton
       manager = PluginManagerSingleton.get()
       plugin = manager.getAllPlugins()[self.meditationPluginComboBox.currentIndex()]
-      plugin.plugin_object.trigger("meditation", self.midiOut, self.notequeue, None)
+      plugin.plugin_object.trigger("meditation", self.midiOut, self.notequeue, value)
 
   def handle_attention_event(self, headset, value):
     """
@@ -376,7 +392,7 @@ class MyMainWindow(Ui_MainWindow):
       from yapsy.PluginManager import PluginManagerSingleton
       manager = PluginManagerSingleton.get()
       plugin = manager.getAllPlugins()[self.attentionPluginComboBox.currentIndex()]
-      plugin.plugin_object.trigger("attention", self.midiOut, self.notequeue, None)
+      plugin.plugin_object.trigger("attention", self.midiOut, self.notequeue, value)
 
 
   def update_ui(self):

@@ -1,0 +1,10 @@
+[Core]
+Name = Spray Can Generator
+Module = spraycangenerator
+
+[Documentation]
+Author = Stefaan Himpe
+Version = 0.1
+Website = https:/github.com/shimpe/mindwave-python
+Description = Midi particle generator
+

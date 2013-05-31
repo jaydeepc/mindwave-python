@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Panel</class>
+ <widget class="QWidget" name="Panel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>118</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Midi channels</string>
+     </property>
+     <property name="buddy">
+      <cstring>midiChannelEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="midiChannelEdit">
+     <property name="text">
+      <string>0,2,3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Allowed vels</string>
+     </property>
+     <property name="buddy">
+      <cstring>allowedVelsEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLineEdit" name="allowedVelsEdit">
+     <property name="text">
+      <string>80:120:10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Central note</string>
+     </property>
+     <property name="buddy">
+      <cstring>centralNoteEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLineEdit" name="centralNoteEdit">
+     <property name="text">
+      <string>C4</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Notes/second</string>
+     </property>
+     <property name="buddy">
+      <cstring>notesPerSecondEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QLineEdit" name="notesPerSecondEdit">
+     <property name="text">
+      <string>10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QLineEdit" name="maxJitterEdit">
+     <property name="text">
+      <string>0.5</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Max jitter</string>
+     </property>
+     <property name="buddy">
+      <cstring>maxJitterEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Spread</string>
+     </property>
+     <property name="buddy">
+      <cstring>spreadEdit</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QLineEdit" name="spreadEdit">
+     <property name="text">
+      <string>5</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>midiChannelEdit</tabstop>
+  <tabstop>allowedVelsEdit</tabstop>
+  <tabstop>centralNoteEdit</tabstop>
+  <tabstop>spreadEdit</tabstop>
+  <tabstop>notesPerSecondEdit</tabstop>
+  <tabstop>maxJitterEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

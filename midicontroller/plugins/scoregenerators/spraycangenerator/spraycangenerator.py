@@ -22,14 +22,15 @@ import parseutils
 from PyQt4 import QtGui
 from mainwindow import Ui_Panel
 
-class SimpleGenerator(IPlugin):
+class SprayCanGenerator(IPlugin):
 
-  name = "Simple Generator"
+  name = "Spray Can Generator"
 
   def __init__(self):
-    super(SimpleGenerator, self).__init__()
+    super(SprayCanGenerator, self).__init__()
     self.parseutil = parseutils.ParseUtil()
     self.instances = {}
+    self.s = {}
 
   def get_ui(self, parent, name):
     Panel = QtGui.QWidget(parent)
@@ -45,7 +46,11 @@ class SimpleGenerator(IPlugin):
       result[name] = {}
       result[name]["midiChannelEdit"] = "{0}".format(Panel.midiChannelEdit.text())
       result[name]["allowedVelsEdit"] = "{0}".format(Panel.allowedVelsEdit.text())
-      result[name]["allowedNotesEdit"] = "{0}".format(Panel.allowedNotesEdit.text())
+      result[name]["centralNoteEdit"] = "{0}".format(Panel.centralNoteEdit.text())      
+      result[name]["spreadEdit"] = "{0}".format(Panel.spreadEdit.text())
+      result[name]["notesPerSecondEdit"] = "{0}".format(Panel.notesPerSecondEdit.text())
+      result[name]["maxJitterEdit"] = "{0}".format(Panel.maxJitterEdit.text())
+
     return result
 
   def set_state_from_dict(self, dct):
@@ -53,36 +58,59 @@ class SimpleGenerator(IPlugin):
       Panel = self.instances[name]
       Panel.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
       Panel.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
-      Panel.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
+      Panel.centralNoteEdit.setText("{0}".format(dct[name]["centralNoteEdit"]))
+      Panel.spreadEdit.setText("{0}".format(dct[name]["spreadEdit"]))
+      Panel.notesPerSecondEdit.setText("{0}".format(dct[name]["notesPerSecondEdit"]))
+      Panel.maxJitterEdit.setText("{0}".format(dct[name]["maxJitterEdit"]))
+
 
   def trigger(self, name, midiOuts, notequeue, value):
     Panel = self.instances[name]
     midichan = self.parseutil.parse_midi_channel_list(Panel.midiChannelEdit.text())
+    #print "midi channel: ", midichan
     if not midichan:
       return
-    vels = self.parseutil.parse_number_ranges(Panel.allowedVelsEdit.text())
 
+    vels = self.parseutil.parse_number_ranges(Panel.allowedVelsEdit.text())
+    #print "velocities: ", vels
     if not vels:
       return
-    values = self.parseutil.parse_number_ranges(Panel.allowedNotesEdit.text())
+
+    values = self.parseutil.parse_number_ranges(Panel.centralNoteEdit.text())
     if value:
       values.append(value)
+    #print "central note: ", values
     if not values:
       return
 
-    import random
-    chan = random.choice(midichan)
-    value= random.choice(values)
-    vel  = random.choice(vels)
+    spreads = self.parseutil.parse_midi_channel_list(Panel.spreadEdit.text())
+    #print "Spreads ", spreads
+    if not spreads:
+      return
 
-    msgbytes  = notequeue.play_note( 
-                  chan, 
-                  value,
-                  vel)
+    notesPerSecond = self.parseutil.parse_int(Panel.notesPerSecondEdit.text())
+    #print "notes per sec: ", notesPerSecond
+    if not notesPerSecond:
+      return
 
-    #print "send midi msg: ", msgbytes
-    for msg in msgbytes:
-      midiOuts[chan].send_message(msg)
+    maxJitter = self.parseutil.parse_list_float(Panel.maxJitterEdit.text())
+    #print "max jitter: ", maxJitter
+    if not maxJitter:
+      return
 
+    import synththread
+
+    if name in self.s:
+      self.s[name].stop()
+      self.s[name].join()
+
+    self.s[name] = synththread.SynthThread(midiOuts, notequeue, midichan, values, vels, spreads, notesPerSecond, maxJitter)
+    self.s[name].start()
+    
   def stop(self, name):
-    pass
+    if name in self.s:
+      self.s[name].stop()
+      self.s[name].join()
+      del self.s[name]
+
+
