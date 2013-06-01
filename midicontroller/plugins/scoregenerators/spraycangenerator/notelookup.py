@@ -34,7 +34,7 @@ class NoteLookup(object):
         [ "B", "Ax", "Cb"]
         ]
     self.lookup_table = {}
-    for octave in [-1,2,3,4,5,6,7,8,9]:
+    for octave in [-1,0,1,2,3,4,5,6,7,8,9]:
       for i,equiv_note in enumerate(self.chromatic_scale_notes):
         for n in equiv_note:
           notename  = "{0}{1}".format(n,octave)
