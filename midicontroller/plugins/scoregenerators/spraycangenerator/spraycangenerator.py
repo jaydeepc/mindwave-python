@@ -36,65 +36,75 @@ class SprayCanGenerator(IPlugin):
     Panel = QtGui.QWidget(parent)
     ui = Ui_Panel()
     ui.setupUi(Panel)
-    self.instances[name] = ui 
+    self.instances[name] = (ui,Panel) 
     return Panel
 
   def get_state_as_dict(self):
     result = {}
     for name in self.instances:
-      Panel = self.instances[name]
+      ui = self.instances[name][0]
       result[name] = {}
-      result[name]["midiChannelEdit"] = "{0}".format(Panel.midiChannelEdit.text())
-      result[name]["allowedVelsEdit"] = "{0}".format(Panel.allowedVelsEdit.text())
-      result[name]["centralNoteEdit"] = "{0}".format(Panel.centralNoteEdit.text())      
-      result[name]["spreadEdit"] = "{0}".format(Panel.spreadEdit.text())
-      result[name]["notesPerSecondEdit"] = "{0}".format(Panel.notesPerSecondEdit.text())
-      result[name]["maxJitterEdit"] = "{0}".format(Panel.maxJitterEdit.text())
+      result[name]["midiChannelEdit"] = "{0}".format(ui.midiChannelEdit.text())
+      result[name]["allowedVelsEdit"] = "{0}".format(ui.allowedVelsEdit.text())
+      result[name]["centralNoteEdit"] = "{0}".format(ui.centralNoteEdit.text())      
+      result[name]["spreadEdit"] = "{0}".format(ui.spreadEdit.text())
+      result[name]["notesPerSecondEdit"] = "{0}".format(ui.notesPerSecondEdit.text())
+      result[name]["maxJitterEdit"] = "{0}".format(ui.maxJitterEdit.text())
 
     return result
 
   def set_state_from_dict(self, dct):
     for name in dct:
-      Panel = self.instances[name]
-      Panel.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
-      Panel.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
-      Panel.centralNoteEdit.setText("{0}".format(dct[name]["centralNoteEdit"]))
-      Panel.spreadEdit.setText("{0}".format(dct[name]["spreadEdit"]))
-      Panel.notesPerSecondEdit.setText("{0}".format(dct[name]["notesPerSecondEdit"]))
-      Panel.maxJitterEdit.setText("{0}".format(dct[name]["maxJitterEdit"]))
+      ui = self.instances[name][0]
+      ui.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
+      ui.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
+      ui.centralNoteEdit.setText("{0}".format(dct[name]["centralNoteEdit"]))
+      ui.spreadEdit.setText("{0}".format(dct[name]["spreadEdit"]))
+      ui.notesPerSecondEdit.setText("{0}".format(dct[name]["notesPerSecondEdit"]))
+      ui.maxJitterEdit.setText("{0}".format(dct[name]["maxJitterEdit"]))
 
 
   def trigger(self, name, midiOuts, notequeue, value):
-    Panel = self.instances[name]
-    midichan = self.parseutil.parse_midi_channel_list(Panel.midiChannelEdit.text())
-    #print "midi channel: ", midichan
+    ui = self.instances[name][0]
+    midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+    print "midi channel: ", midichan
+    if headsetpresent and value:
+      midichan.append(value)
     if not midichan:
       return
 
-    vels = self.parseutil.parse_number_ranges(Panel.allowedVelsEdit.text())
-    #print "velocities: ", vels
+    vels,headsetpresent = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
+    print "velocities: ", vels
+    if headsetpresent and value:
+      vels.append(value)
     if not vels:
       return
 
-    values = self.parseutil.parse_number_ranges(Panel.centralNoteEdit.text())
-    if value:
+    values,headsetpresent = self.parseutil.parse_number_ranges(ui.centralNoteEdit.text())
+    if headsetpresent and value:
       values.append(value)
-    #print "central note: ", values
+    print "central note: ", values
     if not values:
       return
 
-    spreads = self.parseutil.parse_midi_channel_list(Panel.spreadEdit.text())
-    #print "Spreads ", spreads
+    spreads,headsetpresent = self.parseutil.parse_midi_channel_list(ui.spreadEdit.text())
+    print "Spreads ", spreads
+    if headsetpresent and value:
+      spreads.append(value)
     if not spreads:
       return
 
-    notesPerSecond = self.parseutil.parse_int(Panel.notesPerSecondEdit.text())
-    #print "notes per sec: ", notesPerSecond
+    notesPerSecond,headsetpresent = self.parseutil.parse_int(ui.notesPerSecondEdit.text())
+    print "notes per sec: ", notesPerSecond
+    if headsetpresent and value:
+      notesPerSecond.append(value)
     if not notesPerSecond:
       return
 
-    maxJitter = self.parseutil.parse_list_float(Panel.maxJitterEdit.text())
-    #print "max jitter: ", maxJitter
+    maxJitter,headsetpresent = self.parseutil.parse_list_float(ui.maxJitterEdit.text())
+    print "max jitter: ", maxJitter
+    if headsetpresent and value:
+      maxJitter.append(value)
     if not maxJitter:
       return
 
@@ -111,6 +121,5 @@ class SprayCanGenerator(IPlugin):
     if name in self.s:
       self.s[name].stop()
       self.s[name].join()
-      del self.s[name]
-
+      del self.instances[name]
 

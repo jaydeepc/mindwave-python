@@ -25,12 +25,19 @@ class ParseUtil(object):
     """
     parse "1,2 , 3, 4 ,5" into [1,2,3,4,5]
     """
+
+    if "headset" in "{0}".format(text).lower():
+      headsetpresent = True
+    else:
+      headsetpresent = False
+  
+
     try:
       ms_split = text.split(",")
       chans = [ int(i) for i in ms_split ]
-      return chans
+      return chans, headsetpresent
     except ValueError:
-      return []
+      return [], headsetpresent
 
   def parse_number_ranges(self, text):
     """
@@ -56,22 +63,38 @@ class ParseUtil(object):
           values.extend( [start+i*step for i in range((stop-start)/step+1)])
     except ValueError:
       values = []
+
+    if "headset" in "{0}".format(text).lower():
+      headsetpresent = True
+    else:
+      headsetpresent = False
   
-    return values
+    return values, headsetpresent
 
   def parse_int(self, text):
+    if "headset" in "{0}".format(text).lower():
+      headsetpresent = True
+    else:
+      headsetpresent = False
+
     value = []
     try:
       value = [int(text)]
     except ValueError:
       value = []
-    return value
+    return value, headsetpresent
 
   def parse_list_float(self, text):
+
+    if "headset" in "{0}".format(text).lower():
+      headsetpresent = True
+    else:
+      headsetpresent = False
+
     try:
       vals = [float(i) for i in text.split(",")]
     except:
       vals = []
-    return vals
+    return vals, headsetpresent
 
 
