@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu May 30 23:52:44 2013
+# Created: Sat Jun  1 23:35:59 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -365,8 +365,8 @@ class Ui_MainWindow(object):
         self.actionLoad_state = QtGui.QAction(MainWindow)
         self.actionLoad_state.setObjectName(_fromUtf8("actionLoad_state"))
         self.menuFile.addAction(self.actionQuit)
-        self.menuState.addAction(self.actionSave_state)
         self.menuState.addAction(self.actionLoad_state)
+        self.menuState.addAction(self.actionSave_state)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuState.menuAction())
 

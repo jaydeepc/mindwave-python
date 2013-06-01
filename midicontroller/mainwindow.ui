@@ -720,8 +720,8 @@
     <property name="title">
      <string>State</string>
     </property>
-    <addaction name="actionSave_state"/>
     <addaction name="actionLoad_state"/>
+    <addaction name="actionSave_state"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuState"/>
