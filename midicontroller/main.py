@@ -250,8 +250,8 @@ class MyMainWindow(Ui_MainWindow):
     manager = PluginManagerSingleton.get()
     for plugin in manager.getAllPlugins():
       name = plugin.plugin_object.name
-      plugin_model[name] = plugin.plugin_object.set_state_from_dict(plugin_model[name])
-    
+      if name in plugin_model:
+        plugin.plugin_object.set_state_from_dict(plugin_model[name])  
 
   def quit_gracefully(self):
     for i,mo in enumerate(self.midiOut):
