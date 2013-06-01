@@ -35,36 +35,36 @@ class SimpleGenerator(IPlugin):
     Panel = QtGui.QWidget(parent)
     ui = Ui_Panel()
     ui.setupUi(Panel)
-    self.instances[name] = ui 
+    self.instances[name] = (ui, Panel)
     return Panel
 
   def get_state_as_dict(self):
     result = {}
     for name in self.instances:
-      Panel = self.instances[name]
+      ui = self.instances[name][0]
       result[name] = {}
-      result[name]["midiChannelEdit"] = "{0}".format(Panel.midiChannelEdit.text())
-      result[name]["allowedVelsEdit"] = "{0}".format(Panel.allowedVelsEdit.text())
-      result[name]["allowedNotesEdit"] = "{0}".format(Panel.allowedNotesEdit.text())
+      result[name]["midiChannelEdit"] = "{0}".format(ui.midiChannelEdit.text())
+      result[name]["allowedVelsEdit"] = "{0}".format(ui.allowedVelsEdit.text())
+      result[name]["allowedNotesEdit"] = "{0}".format(ui.allowedNotesEdit.text())
     return result
 
   def set_state_from_dict(self, dct):
     for name in dct:
-      Panel = self.instances[name]
-      Panel.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
-      Panel.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
-      Panel.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
+      ui = self.instances[name][0]
+      ui.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
+      ui.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
+      ui.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
 
   def trigger(self, name, midiOuts, notequeue, value):
-    Panel = self.instances[name]
-    midichan = self.parseutil.parse_midi_channel_list(Panel.midiChannelEdit.text())
+    ui = self.instances[name][0]
+    midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
     if not midichan:
       return
-    vels = self.parseutil.parse_number_ranges(Panel.allowedVelsEdit.text())
+    vels = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
 
     if not vels:
       return
-    values = self.parseutil.parse_number_ranges(Panel.allowedNotesEdit.text())
+    values = self.parseutil.parse_number_ranges(ui.allowedNotesEdit.text())
     if value:
       values.append(value)
     if not values:
@@ -85,4 +85,6 @@ class SimpleGenerator(IPlugin):
       midiOuts[chan].send_message(msg)
 
   def stop(self, name):
+    if name in self.instances:
+      del self.instances[name]
     pass
