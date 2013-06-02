@@ -56,6 +56,9 @@ class SimpleGenerator(IPlugin):
       ui.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
 
   def trigger(self, name, midiOuts, notequeue, value):
+    if name not in self.instances:
+      return
+
     ui = self.instances[name][0]
     midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
     if not midichan:
@@ -87,4 +90,3 @@ class SimpleGenerator(IPlugin):
   def stop(self, name):
     if name in self.instances:
       del self.instances[name]
-    pass

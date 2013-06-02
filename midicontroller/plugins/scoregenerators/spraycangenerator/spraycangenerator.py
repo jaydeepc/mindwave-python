@@ -65,6 +65,9 @@ class SprayCanGenerator(IPlugin):
 
 
   def trigger(self, name, midiOuts, notequeue, value):
+    if name not in self.instances:
+      return
+
     ui = self.instances[name][0]
     midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
     print "midi channel: ", midichan
@@ -121,5 +124,6 @@ class SprayCanGenerator(IPlugin):
     if name in self.s:
       self.s[name].stop()
       self.s[name].join()
+    if name in self.instances:
       del self.instances[name]
 
