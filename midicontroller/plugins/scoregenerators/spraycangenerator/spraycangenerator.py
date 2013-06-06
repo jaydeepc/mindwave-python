@@ -78,14 +78,14 @@ class SprayCanGenerator(IPlugin):
 
     ui = self.instances[name][0]
     midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
-    print "midi channel: ", midichan
+#    print "midi channel: ", midichan
     if headsetpresent and value:
       midichan.append(value)
     if not midichan:
       return
 
     vels,headsetpresent = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
-    print "velocities: ", vels
+#    print "velocities: ", vels
     if headsetpresent and value:
       vels.append(value)
     if not vels:
@@ -94,26 +94,26 @@ class SprayCanGenerator(IPlugin):
     values,headsetpresent = self.parseutil.parse_number_ranges(ui.centralNoteEdit.text())
     if headsetpresent and value:
       values.append(value)
-    print "central note: ", values
+#    print "central note: ", values
     if not values:
       return
 
     spreads,headsetpresent = self.parseutil.parse_midi_channel_list(ui.spreadEdit.text())
-    print "Spreads ", spreads
+#    print "Spreads ", spreads
     if headsetpresent and value:
       spreads.append(value)
     if not spreads:
       return
 
     notesPerSecond,headsetpresent = self.parseutil.parse_int(ui.notesPerSecondEdit.text())
-    print "notes per sec: ", notesPerSecond
+#    print "notes per sec: ", notesPerSecond
     if headsetpresent and value:
       notesPerSecond.append(value)
     if not notesPerSecond:
       return
 
     maxJitter,headsetpresent = self.parseutil.parse_list_float(ui.maxJitterEdit.text())
-    print "max jitter: ", maxJitter
+#    print "max jitter: ", maxJitter
     if headsetpresent and value:
       maxJitter.append(value)
     if not maxJitter:
@@ -146,7 +146,8 @@ class SprayCanGenerator(IPlugin):
 
   def resume(self, name):
     self.playing_suspended[name] = False
-    self.trigger(name, *self.props[name])
+    if name in self.playing_suspended and self.playing_suspended[name]:
+      self.trigger(name, *self.props[name])
 
   def get_midi_channel_list(self, name):
     if name in self.instances:
