@@ -113,6 +113,11 @@ class MyMainWindow(Ui_MainWindow):
 
     self.notelookup = notelookup.NoteLookup()
 
+    # more signals
+    self.attentionCheckBox.clicked.connect(self.attentionCheckBoxClicked)
+    self.meditationCheckBox.clicked.connect(self.meditationCheckBoxClicked)
+    self.eyeBlinkCheckBox.clicked.connect(self.eyeBlinkCheckBoxClicked)
+
     self.actionQuit.triggered.connect(QtGui.qApp.quit)
     self.actionSave_state.triggered.connect(self.save_state)
     self.actionLoad_state.triggered.connect(self.load_state)
@@ -189,38 +194,75 @@ class MyMainWindow(Ui_MainWindow):
     self.attentionPluginSelected(0)
     self.meditationPluginSelected(0)
     self.eyeBlinkPluginSelected(0)
+
+  def suspend_plugin(self, plugin_object, section):
+    plugin_object.suspend(section)
+    midichan = plugin_object.get_midi_channel_list(section)
+    for m in midichan:
+       msgbytes = self.notequeue.clear_notes(m)
+       for msg in msgbytes:
+          self.midiOut[m].send_message(msg)
+
+  def attentionCheckBoxClicked(self):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
+    if not self.attentionCheckBox.isChecked():
+      self.suspend_plugin(plugin.plugin_object, 'attention')
+    else:
+      plugin.plugin_object.resume('attention')
   
   def attentionPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
-    plugin.plugin_object.stop('attention')
+    self.suspend_plugin(plugin.plugin_object, 'attention')
     self.prevAttentionPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.attentionPluginWidget.setParent(None)
     self.attentionPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "attention")
     self.gridLayout.addWidget(self.attentionPluginWidget, 1, 0)
 
+  def meditationCheckBoxClicked(self):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
+    if not self.meditationCheckBox.isChecked():
+      self.suspend_plugin(plugin.plugin_object, 'meditation')
+    else:
+      plugin.plugin_object.resume('meditation')
+ 
+
   def meditationPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
-    plugin.plugin_object.stop('meditation')
+    self.suspend_plugin(plugin.plugin_object, 'meditation')
     self.prevMeditationPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.meditationPluginWidget.setParent(None)
     self.meditationPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "meditation")
     self.gridLayout.addWidget(self.meditationPluginWidget, 3, 0)
 
+
+  def eyeBlinkCheckBoxClicked(self):
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
+    if not self.eyeBlinkCheckBox.isChecked():
+      self.suspend_plugin(plugin.plugin_object, 'eyeBlink')
+    else:
+      plugin.plugin_object.resume('eyeBlink')
+
   def eyeBlinkPluginSelected(self, index):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
-    plugin.plugin_object.stop('eyeblink')
+    self.suspend_plugin(plugin.plugin_object, 'eyeBlink')
     self.prevEyeBlinkPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.eyeBlinkPluginWidget.setParent(None)
-    self.eyeBlinkPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "eyeblink")
+    self.eyeBlinkPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "eyeBlink")
     self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
 
   def save_state(self):
@@ -258,6 +300,11 @@ class MyMainWindow(Ui_MainWindow):
       bytemsg = self.notequeue.clear_notes(i)
       for msg in bytemsg:
         self.midiOut[i].send_message(msg)
+    from yapsy.PluginManager import PluginManagerSingleton
+    manager = PluginManagerSingleton.get()
+    for plugin in manager.getAllPlugins():
+      for section in ['meditation', 'attention', 'eyeBlink']:
+          plugin.plugin_object.stop(section)
 
   def monitor(self):
     """
@@ -372,7 +419,7 @@ class MyMainWindow(Ui_MainWindow):
       from yapsy.PluginManager import PluginManagerSingleton
       manager = PluginManagerSingleton.get()
       plugin = manager.getAllPlugins()[self.eyeBlinkPluginComboBox.currentIndex()]
-      plugin.plugin_object.trigger("eyeblink", self.midiOut, self.notequeue, None)
+      plugin.plugin_object.trigger("eyeBlink", self.midiOut, self.notequeue, None)
  
   def handle_meditation_event(self, headset, value):
     """

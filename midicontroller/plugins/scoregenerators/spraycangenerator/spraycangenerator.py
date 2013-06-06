@@ -31,6 +31,8 @@ class SprayCanGenerator(IPlugin):
     self.parseutil = parseutils.ParseUtil()
     self.instances = {}
     self.s = {}
+    self.props = {}
+    self.playing_suspended = {} 
 
   def get_ui(self, parent, name):
     Panel = QtGui.QWidget(parent)
@@ -65,8 +67,14 @@ class SprayCanGenerator(IPlugin):
 
 
   def trigger(self, name, midiOuts, notequeue, value):
+
     if name not in self.instances:
       return
+
+    if name in self.playing_suspended and self.playing_suspended[name]:
+      return
+
+    self.props[name] =  (midiOuts, notequeue, value)
 
     ui = self.instances[name][0]
     midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
@@ -126,4 +134,26 @@ class SprayCanGenerator(IPlugin):
       self.s[name].join()
     if name in self.instances:
       del self.instances[name]
+
+  def suspend(self, name):
+    if name in self.s:
+      self.s[name].stop()
+      self.s[name].join()
+      self.playing_suspended[name] = True
+
+  def is_suspended(self, name):
+    return name in self.playing_suspended and self.playing_suspended[name]
+
+  def resume(self, name):
+    self.playing_suspended[name] = False
+    self.trigger(name, *self.props[name])
+
+  def get_midi_channel_list(self, name):
+    if name in self.instances:
+      ui = self.instances[name][0]
+      midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+      return midichan
+    return []
+
+
 

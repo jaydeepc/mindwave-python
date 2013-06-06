@@ -30,6 +30,7 @@ class SimpleGenerator(IPlugin):
     super(SimpleGenerator, self).__init__()
     self.parseutil = parseutils.ParseUtil()
     self.instances = {}
+    self.playing_suspended = {} 
 
   def get_ui(self, parent, name):
     Panel = QtGui.QWidget(parent)
@@ -57,6 +58,9 @@ class SimpleGenerator(IPlugin):
 
   def trigger(self, name, midiOuts, notequeue, value):
     if name not in self.instances:
+      return
+
+    if name in self.playing_suspended and self.playing_suspended[name]:
       return
 
     ui = self.instances[name][0]
@@ -87,6 +91,25 @@ class SimpleGenerator(IPlugin):
     for msg in msgbytes:
       midiOuts[chan].send_message(msg)
 
+  def suspend(self, name):
+    self.playing_suspended[name] = True
+
+  def resume(self, name):
+    self.playing_suspended[name] = False
+
+  def is_suspended(self, name):
+    return name in self.playing_suspended and self.playing_suspended[name]
+
   def stop(self, name):
     if name in self.instances:
       del self.instances[name]
+
+  def get_midi_channel_list(self, name):
+    if name in self.instances:
+      ui = self.instances[name][0]
+      midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+      return midichan
+    return []
+
+
+
