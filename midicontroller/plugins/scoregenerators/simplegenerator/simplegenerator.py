@@ -33,6 +33,9 @@ class SimpleGenerator(IPlugin):
     self.playing_suspended = {} 
 
   def get_ui(self, parent, name):
+    if name in self.instances:
+      return self.instances[name][1]
+
     Panel = QtGui.QWidget(parent)
     ui = Ui_Panel()
     ui.setupUi(Panel)
