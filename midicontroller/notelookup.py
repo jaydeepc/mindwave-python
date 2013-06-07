@@ -44,6 +44,10 @@ class NoteLookup(object):
             self.lookup_table[string.lower("{0}".format(notename))] = notenumber
     
   def lookup(self, note):
+    """
+    transform midi number string to integer;
+    if that fails, try to convert from note name to midi number
+    """
     try:
       return int(note)
     except ValueError:

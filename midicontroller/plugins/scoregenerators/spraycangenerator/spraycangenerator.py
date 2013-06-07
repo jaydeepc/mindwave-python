@@ -27,6 +27,9 @@ class SprayCanGenerator(IPlugin):
   name = "Spray Can Generator"
 
   def __init__(self):
+    """
+    set up spray can generator plugin
+    """
     super(SprayCanGenerator, self).__init__()
     self.parseutil = parseutils.ParseUtil()
     self.instances = {}
@@ -35,6 +38,10 @@ class SprayCanGenerator(IPlugin):
     self.playing_suspended = {} 
 
   def get_ui(self, parent, name):
+    """
+    create ui for embedding in main ui
+    and keep reference for future use
+    """
     if name in self.instances:
       return self.instances[name][1]
 
@@ -45,6 +52,10 @@ class SprayCanGenerator(IPlugin):
     return Panel
 
   def get_state_as_dict(self, parent):
+    """
+    returns the plugin's internal state as a dictionary
+    used during save operation
+    """
     result = {}
     for name in self.instances:
       if name not in self.instances:
@@ -61,6 +72,10 @@ class SprayCanGenerator(IPlugin):
     return result
 
   def set_state_from_dict(self, parent, dct):
+    """
+    set the plugin's internal state from a dictionary
+    used during load operation
+    """
     for name in dct:
       if name not in self.instances:
         self.get_ui(parent, name)
@@ -74,7 +89,9 @@ class SprayCanGenerator(IPlugin):
 
 
   def trigger(self, name, midiOuts, notequeue, value):
-
+    """
+    method called by main ui if new event arrives
+    """
     if name not in self.instances:
       return
 
@@ -136,6 +153,9 @@ class SprayCanGenerator(IPlugin):
     self.s[name].start()
     
   def stop(self, name):
+    """
+    stop plugin and delete
+    """
     if name in self.s:
       self.s[name].stop()
       self.s[name].join()
@@ -143,20 +163,32 @@ class SprayCanGenerator(IPlugin):
       del self.instances[name]
 
   def suspend(self, name):
+    """
+    stop generating music, but don't delete the plugin yet
+    """
     if name in self.s:
       self.s[name].stop()
       self.s[name].join()
       self.playing_suspended[name] = True
 
   def is_suspended(self, name):
+    """
+    true of plugin is suspended
+    """
     return name in self.playing_suspended and self.playing_suspended[name]
 
   def resume(self, name):
+    """
+    resume synthesis of midi msgs
+    """
     self.playing_suspended[name] = False
     if name in self.playing_suspended and self.playing_suspended[name]:
       self.trigger(name, *self.props[name])
 
   def get_midi_channel_list(self, name):
+    """
+    return a list of midi channels that this plugin can write to 
+    """
     if name in self.instances:
       ui = self.instances[name][0]
       midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())

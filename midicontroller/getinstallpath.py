@@ -18,6 +18,9 @@
 import os.path
 import sys
 def getInstallPath():
+    """
+    function that returns the directory where the script is located
+    """
     thePath = os.path.dirname(sys.argv[0])
     if thePath:
         thePath += os.sep

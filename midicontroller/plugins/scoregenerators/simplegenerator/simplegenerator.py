@@ -16,7 +16,6 @@
 ##################################################################################
 
 from yapsy.IPlugin import IPlugin
-from yapsy.PluginManager import PluginManagerSingleton
 import parseutils
 
 from PyQt4 import QtGui
@@ -27,12 +26,19 @@ class SimpleGenerator(IPlugin):
   name = "Simple Generator"
 
   def __init__(self):
+    """
+    set up simple generator plugin
+    """
     super(SimpleGenerator, self).__init__()
     self.parseutil = parseutils.ParseUtil()
     self.instances = {}
     self.playing_suspended = {} 
 
   def get_ui(self, parent, name):
+    """
+    create the ui for embedding in main ui
+    keep a reference for later usage
+    """
     if name in self.instances:
       return self.instances[name][1]
 
@@ -43,6 +49,10 @@ class SimpleGenerator(IPlugin):
     return Panel
 
   def get_state_as_dict(self, parent):
+    """
+    return internal state of the plugin as a dictionary;
+    used during save state to file
+    """
     result = {}
     for name in self.instances:
       if name not in self.instances:
@@ -55,6 +65,10 @@ class SimpleGenerator(IPlugin):
     return result
 
   def set_state_from_dict(self, parent, dct):
+    """
+    set internal state of the plugin from a dictionary;
+    used during load state from file
+    """
     for name in dct:
       if name not in self.instances:
         self.get_ui(parent, name)
@@ -64,6 +78,9 @@ class SimpleGenerator(IPlugin):
       ui.allowedNotesEdit.setText("{0}".format(dct[name]["allowedNotesEdit"]))
 
   def trigger(self, name, midiOuts, notequeue, value):
+    """
+    method called by the main program to ask the plugin to do something
+    """
     if name not in self.instances:
       return
 
@@ -99,24 +116,37 @@ class SimpleGenerator(IPlugin):
       midiOuts[chan].send_message(msg)
 
   def suspend(self, name):
+    """
+    suspend generating music while not deleting the plugin
+    """
     self.playing_suspended[name] = True
 
   def resume(self, name):
+    """
+    resume generating music
+    """
     self.playing_suspended[name] = False
 
   def is_suspended(self, name):
+    """
+    true if plugin is currently suspended
+    """
     return name in self.playing_suspended and self.playing_suspended[name]
 
   def stop(self, name):
+    """
+    stop and delete plugin
+    """
     if name in self.instances:
       del self.instances[name]
 
   def get_midi_channel_list(self, name):
+    """
+    return a list of all channels this plugin can write midi msgs to
+    """
     if name in self.instances:
       ui = self.instances[name][0]
       midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
       return midichan
     return []
-
-
 

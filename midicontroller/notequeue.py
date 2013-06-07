@@ -46,6 +46,9 @@ class NoteQueue(object):
     return msgbytes
 
   def clear_notes(self, channel):
+    """
+    create note off midi msgs for all notes in the channel
+    """
     msgbytes = []
     q = self.qs[channel]
     while q:
@@ -58,6 +61,9 @@ class NoteQueue(object):
     return msgbytes
 
   def clear_all_notes(self):
+    """
+    create note off midi msgs for all notes in all channels
+    """
     msgbytes = []
     for i,q in enumerate(self.qs):
       msgbytes.extend(self.clear_notes(i))

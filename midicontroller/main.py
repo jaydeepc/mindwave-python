@@ -68,7 +68,7 @@ class MyMainWindow(Ui_MainWindow):
         ]
     for i,cb in enumerate(self.midiDeviceComboBoxes):
       cb.currentIndexChanged.connect(self.choose_midi_device_for_channel(i))
-
+    # reset midi channel buttons
     self.resetButtons = [
         self.resetChannel0Button,
         self.resetChannel1Button,
@@ -92,7 +92,6 @@ class MyMainWindow(Ui_MainWindow):
 
     # provide storage to remember the last 512 raw eeg data points
     self.last_512_raw_waves = deque([0]*RAW_VAL_WIN_SIZE, RAW_VAL_WIN_SIZE)
-
     self.counter = 0
 
     # reserve a notequeue to remember 3 notes on each channel
@@ -111,23 +110,29 @@ class MyMainWindow(Ui_MainWindow):
     self.signal_quality = "unknown signal quality"
     self.update_statusbar()
 
+    # instantiate an object that can transform note names to midi numbers
     self.notelookup = notelookup.NoteLookup()
 
-    # more signals
+    # more signals: what to do if a checkbox is clicked
     self.attentionCheckBox.clicked.connect(self.attentionCheckBoxClicked)
     self.meditationCheckBox.clicked.connect(self.meditationCheckBoxClicked)
     self.eyeBlinkCheckBox.clicked.connect(self.eyeBlinkCheckBoxClicked)
 
+    # make sure the menu entries do something
     self.actionQuit.triggered.connect(QtGui.qApp.quit)
     self.actionSave_state.triggered.connect(self.save_state)
     self.actionLoad_state.triggered.connect(self.load_state)
 
+    # determine which ui elements should be saved/loaded
     self.setup_serialization()
 
+    # discover the plugins and display in the ui as needed
     self.setup_plugins()
 
   def setup_serialization(self):
-
+    """
+    function that collects all information required for saving ui state to model file
+    """
     def lineedit_getter(lineedit):
       return "{0}".format(lineedit.text())
 
@@ -168,6 +173,10 @@ class MyMainWindow(Ui_MainWindow):
     self.serializer.register("eyeBlinkPluginComboBox",self.eyeBlinkPluginComboBox, combobox_getter, combobox_setter)
 
   def setup_plugins(self):
+    """
+    discover all plugins and populate the plugin combo boxes
+    setup signals so that selecting a plugin has some effect
+    """
     self.prevAttentionPluginIndex = 0
     self.prevMeditationPluginIndex = 0
     self.prevEyeBlinkPluginIndex = 0
@@ -196,6 +205,9 @@ class MyMainWindow(Ui_MainWindow):
     self.eyeBlinkPluginSelected(0)
 
   def suspend_plugin(self, plugin_object, section):
+    """
+    define how to suspend a running plugin without deleting it, e.g. when the checkbox is unchecked
+    """
     plugin_object.suspend(section)
     midichan = plugin_object.get_midi_channel_list(section)
     for m in midichan:
@@ -204,6 +216,9 @@ class MyMainWindow(Ui_MainWindow):
           self.midiOut[m].send_message(msg)
 
   def attentionCheckBoxClicked(self):
+    """
+    what to do if the attention check box is clicked
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
@@ -213,6 +228,9 @@ class MyMainWindow(Ui_MainWindow):
       plugin.plugin_object.resume('attention')
   
   def attentionPluginSelected(self, index):
+    """
+    what to do if an attention plugin is selected
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
@@ -225,6 +243,9 @@ class MyMainWindow(Ui_MainWindow):
     self.attentionCheckBoxClicked()
 
   def meditationCheckBoxClicked(self):
+    """
+    what to do if meditation checkbox is clicked
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
@@ -235,6 +256,9 @@ class MyMainWindow(Ui_MainWindow):
  
 
   def meditationPluginSelected(self, index):
+    """
+    what to do if a meditation plugin is selected
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
@@ -248,6 +272,9 @@ class MyMainWindow(Ui_MainWindow):
 
 
   def eyeBlinkCheckBoxClicked(self):
+    """
+    what to do if the eye blink check box is clicked
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
@@ -257,6 +284,9 @@ class MyMainWindow(Ui_MainWindow):
       plugin.plugin_object.resume('eyeBlink')
 
   def eyeBlinkPluginSelected(self, index):
+    """
+    what to do if an eye blink plugin is selected
+    """
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
@@ -269,6 +299,9 @@ class MyMainWindow(Ui_MainWindow):
     self.eyeBlinkCheckBoxClicked()
 
   def save_state(self):
+    """
+    get state of ui and all plugins, and save to file
+    """
     model = self.serializer.ui_to_model()
     plugin_model = {}
     from yapsy.PluginManager import PluginManagerSingleton
@@ -284,6 +317,9 @@ class MyMainWindow(Ui_MainWindow):
       f.write(modelstring)
 
   def load_state(self):
+    """
+    get state of ui and all plugins from file, and set to the ui
+    """
     with open("midicontroller-state.json", "r") as f:
       modelstring = f.read()
     import json
@@ -304,6 +340,9 @@ class MyMainWindow(Ui_MainWindow):
 
 
   def quit_gracefully(self):
+    """
+    switch off all playing notes and delete all plugins
+    """
     for i,mo in enumerate(self.midiOut):
       bytemsg = self.notequeue.clear_notes(i)
       for msg in bytemsg:
@@ -316,7 +355,7 @@ class MyMainWindow(Ui_MainWindow):
 
   def monitor(self):
     """
-    start/stop button
+    start/stop button pressed
     """
     print "monitor"
     if self.running:
@@ -354,10 +393,16 @@ class MyMainWindow(Ui_MainWindow):
     self.update_statusbar()
 
   def handle_poor_signal(self, headset, value):
+    """
+    react to a poor signal event
+    """
     self.signal_quality = "poor signal quality {0}%".format(value)
     self.MainWindow.update_statusbar_signal.emit()
 
   def handle_good_signal(self, headset, value):
+    """
+    handle to a good signal event
+    """
     self.signal_quality = "good signal quality"
     self.MainWindow.update_statusbar_signal.emit()
 

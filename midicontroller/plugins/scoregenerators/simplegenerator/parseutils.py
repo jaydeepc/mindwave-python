@@ -15,6 +15,8 @@
 #      along with mindwave-python.  If not, see <http://www.gnu.org/licenses/>.  #
 ##################################################################################
 
+# NOTE: duplicated from ../../.. -> need to find out how to use code from parent folders with yapsy
+
 import notelookup
 
 class ParseUtil(object):

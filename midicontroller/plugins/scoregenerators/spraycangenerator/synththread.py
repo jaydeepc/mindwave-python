@@ -1,7 +1,13 @@
 import threading 
 
 class SynthThread(threading.Thread):
+  """
+  helper class to synthesis a flurry of midi events in the absence of external stimuli
+  """
   def __init__(self, midiOuts, notequeue, midiChan, values, vels, spreads, notesPerSecond, maxJitter):
+    """
+    initialize the synthesis thread
+    """
     threading.Thread.__init__(self)
     self.midiOuts = midiOuts
     self.notequeue = notequeue
@@ -14,6 +20,9 @@ class SynthThread(threading.Thread):
     self.stop_processing = False
 
   def run(self):
+    """
+    start synthesizing midi events
+    """
     #print "RUN"
     import random
     while not self.stop_processing:
@@ -33,6 +42,9 @@ class SynthThread(threading.Thread):
       time.sleep(1.0/(random.choice(self.notesPerSecond)+(sign*random.choice(self.maxJitter))))
 
   def stop(self):
+    """
+    stop synthesizing midi events
+    """
     #print "STOP"
     self.stop_processing = True
 
