@@ -222,6 +222,7 @@ class MyMainWindow(Ui_MainWindow):
     self.attentionPluginWidget.setParent(None)
     self.attentionPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "attention")
     self.gridLayout.addWidget(self.attentionPluginWidget, 1, 0)
+    self.attentionCheckBoxClicked()
 
   def meditationCheckBoxClicked(self):
     from yapsy.PluginManager import PluginManagerSingleton
@@ -243,6 +244,7 @@ class MyMainWindow(Ui_MainWindow):
     self.meditationPluginWidget.setParent(None)
     self.meditationPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "meditation")
     self.gridLayout.addWidget(self.meditationPluginWidget, 3, 0)
+    self.meditationCheckBoxClicked()
 
 
   def eyeBlinkCheckBoxClicked(self):
@@ -264,6 +266,7 @@ class MyMainWindow(Ui_MainWindow):
     self.eyeBlinkPluginWidget.setParent(None)
     self.eyeBlinkPluginWidget = plugin.plugin_object.get_ui(self.MainWindow.centralWidget(), "eyeBlink")
     self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
+    self.eyeBlinkCheckBoxClicked()
 
   def save_state(self):
     model = self.serializer.ui_to_model()
@@ -272,7 +275,7 @@ class MyMainWindow(Ui_MainWindow):
     manager = PluginManagerSingleton.get()
     for plugin in manager.getAllPlugins():
       name = plugin.plugin_object.name
-      plugin_model[name] = plugin.plugin_object.get_state_as_dict()
+      plugin_model[name] = plugin.plugin_object.get_state_as_dict(self.MainWindow.centralWidget())
     model['plugins'] = plugin_model
     import json
     modelstring = json.dumps(model, sort_keys=True,
@@ -293,7 +296,12 @@ class MyMainWindow(Ui_MainWindow):
     for plugin in manager.getAllPlugins():
       name = plugin.plugin_object.name
       if name in plugin_model:
-        plugin.plugin_object.set_state_from_dict(plugin_model[name])  
+        plugin.plugin_object.set_state_from_dict(self.MainWindow.centralWidget(),plugin_model[name])  
+    self.attentionCheckBoxClicked()
+    self.meditationCheckBoxClicked()
+    self.eyeBlinkCheckBoxClicked()
+
+
 
   def quit_gracefully(self):
     for i,mo in enumerate(self.midiOut):

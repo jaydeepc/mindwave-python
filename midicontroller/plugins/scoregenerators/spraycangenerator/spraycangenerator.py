@@ -44,9 +44,11 @@ class SprayCanGenerator(IPlugin):
     self.instances[name] = (ui,Panel) 
     return Panel
 
-  def get_state_as_dict(self):
+  def get_state_as_dict(self, parent):
     result = {}
     for name in self.instances:
+      if name not in self.instances:
+        self.get_ui(parent, name)
       ui = self.instances[name][0]
       result[name] = {}
       result[name]["midiChannelEdit"] = "{0}".format(ui.midiChannelEdit.text())
@@ -58,8 +60,10 @@ class SprayCanGenerator(IPlugin):
 
     return result
 
-  def set_state_from_dict(self, dct):
+  def set_state_from_dict(self, parent, dct):
     for name in dct:
+      if name not in self.instances:
+        self.get_ui(parent, name)
       ui = self.instances[name][0]
       ui.midiChannelEdit.setText("{0}".format(dct[name]["midiChannelEdit"]))
       ui.allowedVelsEdit.setText("{0}".format(dct[name]["allowedVelsEdit"]))
