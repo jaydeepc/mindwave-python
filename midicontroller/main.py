@@ -40,7 +40,8 @@ class MyMainWindow(Ui_MainWindow):
     super(MyMainWindow, self).__init__()
     self.setupUi(MainWindow)
     self.MainWindow = MainWindow
-    
+    self.last_loaded_scene = None 
+
     self.running = False
 
     # connect signals and slots
@@ -120,8 +121,17 @@ class MyMainWindow(Ui_MainWindow):
 
     # make sure the menu entries do something
     self.actionQuit.triggered.connect(QtGui.qApp.quit)
-    self.actionSave_state.triggered.connect(self.save_state)
-    self.actionLoad_state.triggered.connect(self.load_state)
+
+    # attach signals to the scene buttons
+    self.loadSceneButtons = [ self.loadScene1Button, self.loadScene2Button, self.loadScene3Button,
+                              self.loadScene4Button, self.loadScene5Button, self.loadScene6Button,
+                              self.loadScene7Button, self.loadScene8Button, self.loadScene9Button]
+    self.saveSceneButtons = [ self.saveScene1Button, self.saveScene2Button, self.saveScene3Button,
+                              self.saveScene4Button, self.saveScene5Button, self.saveScene6Button,
+                              self.saveScene7Button, self.saveScene8Button, self.saveScene9Button]
+    for i,b in enumerate(self.loadSceneButtons):
+      self.loadSceneButtons[i].clicked.connect(self.load_nth_scene(i))
+      self.saveSceneButtons[i].clicked.connect(self.save_nth_scene(i))
 
     # determine which ui elements should be saved/loaded
     self.setup_serialization()
@@ -298,7 +308,29 @@ class MyMainWindow(Ui_MainWindow):
     self.gridLayout.addWidget(self.eyeBlinkPluginWidget, 5, 0)
     self.eyeBlinkCheckBoxClicked()
 
-  def save_state(self):
+  def load_nth_scene(self, n):
+    """
+    callback function that loads the nth scene from file
+    """
+    def load_nth_scene_helper():
+      filename = "midicontroller/scenes/midicontroller-%d.json" % (n+1)
+      self.last_loaded_scene = (n+1)
+      self.update_statusbar()
+      return self.load_state(filename)
+    return load_nth_scene_helper
+
+
+  def save_nth_scene(self, n):
+    """
+    callback function that saves the nth scene to file
+    """
+    def save_nth_scene_helper():
+      filename = "midicontroller/scenes/midicontroller-%d.json" % (n+1)
+      return self.save_state(filename)
+    return save_nth_scene_helper
+
+
+  def save_state(self, filename):
     """
     get state of ui and all plugins, and save to file
     """
@@ -313,15 +345,19 @@ class MyMainWindow(Ui_MainWindow):
     import json
     modelstring = json.dumps(model, sort_keys=True,
                               indent=4, separators=(",",": "))
-    with open("midicontroller-state.json", "w") as f:
+    with open(filename, "w") as f:
       f.write(modelstring)
 
-  def load_state(self):
+  def load_state(self, filename):
     """
     get state of ui and all plugins from file, and set to the ui
     """
-    with open("midicontroller-state.json", "r") as f:
-      modelstring = f.read()
+    try:
+      with open(filename, "r") as f:
+        modelstring = f.read()
+    except IOError:
+      return
+
     import json
     model = json.loads(modelstring)
     plugin_model = model['plugins']
@@ -336,8 +372,6 @@ class MyMainWindow(Ui_MainWindow):
     self.attentionCheckBoxClicked()
     self.meditationCheckBoxClicked()
     self.eyeBlinkCheckBoxClicked()
-
-
 
   def quit_gracefully(self):
     """
@@ -510,7 +544,7 @@ class MyMainWindow(Ui_MainWindow):
         #print "BLINK {0}".format(self.eyeblink_counter)
 
   def update_statusbar(self):
-    self.statusbar.showMessage("{0} - {1}".format(self.connected,self.signal_quality))
+    self.statusbar.showMessage("{0} - {1} - Last loaded scene: {2}".format(self.connected,self.signal_quality,self.last_loaded_scene if self.last_loaded_scene is not None else "None"))
 
 class MainWindowWithCustomSignal(QtGui.QMainWindow):
   """
