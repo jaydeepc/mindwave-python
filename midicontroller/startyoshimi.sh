@@ -1,6 +1,6 @@
 #!/bin/sh 
 killall jackd
-yoshimi -k -K -S./synthconfig/yoshimi.state &
+yoshimi -k -S./synthconfig/yoshimi.state &
 python genconfig_linuxsampler.py
 /usr/local/bin/qsampler ./synthconfig/linuxsampler.lscp &
 qjackctl &
