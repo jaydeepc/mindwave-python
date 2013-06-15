@@ -29,6 +29,11 @@ import simpleserializer
 RAW_VAL_WIN_SIZE = 512
 EYEBLINK_WIN_SIZE = 128
 NO_OF_POINTS = 100
+MEDITATION = 'meditation'
+ATTENTION = 'attention'
+EYEBLINK = 'eyeBlink'
+SECTIONS = [MEDITATION, ATTENTION, EYEBLINK]
+
 
 class MyMainWindow(Ui_MainWindow):
 
@@ -233,9 +238,9 @@ class MyMainWindow(Ui_MainWindow):
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
     if not self.attentionCheckBox.isChecked():
-      self.suspend_plugin(plugin.plugin_object, 'attention')
+      self.suspend_plugin(plugin.plugin_object, ATTENTION)
     else:
-      plugin.plugin_object.resume('attention')
+      plugin.plugin_object.resume(ATTENTION)
   
   def attentionPluginSelected(self, index):
     """
@@ -244,7 +249,7 @@ class MyMainWindow(Ui_MainWindow):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevAttentionPluginIndex]
-    self.suspend_plugin(plugin.plugin_object, 'attention')
+    self.suspend_plugin(plugin.plugin_object, ATTENTION)
     self.prevAttentionPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.attentionPluginWidget.setParent(None)
@@ -260,9 +265,9 @@ class MyMainWindow(Ui_MainWindow):
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
     if not self.meditationCheckBox.isChecked():
-      self.suspend_plugin(plugin.plugin_object, 'meditation')
+      self.suspend_plugin(plugin.plugin_object, MEDITATION)
     else:
-      plugin.plugin_object.resume('meditation')
+      plugin.plugin_object.resume(MEDITATION)
  
 
   def meditationPluginSelected(self, index):
@@ -272,7 +277,7 @@ class MyMainWindow(Ui_MainWindow):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevMeditationPluginIndex]
-    self.suspend_plugin(plugin.plugin_object, 'meditation')
+    self.suspend_plugin(plugin.plugin_object, MEDITATION)
     self.prevMeditationPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.meditationPluginWidget.setParent(None)
@@ -289,9 +294,9 @@ class MyMainWindow(Ui_MainWindow):
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
     if not self.eyeBlinkCheckBox.isChecked():
-      self.suspend_plugin(plugin.plugin_object, 'eyeBlink')
+      self.suspend_plugin(plugin.plugin_object, EYEBLINK)
     else:
-      plugin.plugin_object.resume('eyeBlink')
+      plugin.plugin_object.resume(EYEBLINK)
 
   def eyeBlinkPluginSelected(self, index):
     """
@@ -300,7 +305,7 @@ class MyMainWindow(Ui_MainWindow):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     plugin = manager.getAllPlugins()[self.prevEyeBlinkPluginIndex]
-    self.suspend_plugin(plugin.plugin_object, 'eyeBlink')
+    self.suspend_plugin(plugin.plugin_object, EYEBLINK)
     self.prevEyeBlinkPluginIndex = index
     plugin = manager.getAllPlugins()[index]
     self.eyeBlinkPluginWidget.setParent(None)
@@ -365,7 +370,10 @@ class MyMainWindow(Ui_MainWindow):
     self.serializer.model_to_ui(model)
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
+
     for plugin in manager.getAllPlugins():
+      for section in SECTIONS:
+        self.suspend_plugin(plugin.plugin_object, section)
       name = plugin.plugin_object.name
       if name in plugin_model:
         plugin.plugin_object.set_state_from_dict(self.MainWindow.centralWidget(),plugin_model[name])  
@@ -384,7 +392,7 @@ class MyMainWindow(Ui_MainWindow):
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()
     for plugin in manager.getAllPlugins():
-      for section in ['meditation', 'attention', 'eyeBlink']:
+      for section in SECTIONS: 
           plugin.plugin_object.stop(section)
 
   def monitor(self):
