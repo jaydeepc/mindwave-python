@@ -141,6 +141,9 @@ class MidiMsg(object):
     msgbytes.append(self.clip_velocity(release_velocity))
     return msgbytes
 
+  def all_notes_off(self, channel):
+    return self.control_change(channel, ALLNOTESOFF, 0)
+
   def monopressure(self, channel, pressure):
     """
     define pressure (aftertouch) for all notes in channel
