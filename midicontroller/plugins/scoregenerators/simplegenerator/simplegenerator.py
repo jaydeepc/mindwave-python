@@ -15,6 +15,10 @@
 #      along with mindwave-python.  If not, see <http://www.gnu.org/licenses/>.  #
 ##################################################################################
 
+import sys
+import os
+sys.path += [os.path.normpath(os.path.join(os.path.abspath(__file__), "..", "..", "..", ".."))]
+
 from yapsy.IPlugin import IPlugin
 import parseutils
 
@@ -88,15 +92,26 @@ class SimpleGenerator(IPlugin):
       return
 
     ui = self.instances[name][0]
-    midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+    midichan,headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+    if headsetpresent and value:
+      if not midichan:
+        midichan = []
+      midichan.append(value)
     if not midichan:
       return
-    vels = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
 
+    vels,headsetpresent = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
+    if headsetpresent and value:
+      if not vels:
+        vels = []
+      vels.append(value)
     if not vels:
       return
-    values = self.parseutil.parse_number_ranges(ui.allowedNotesEdit.text())
-    if value:
+
+    values,headsetpresent = self.parseutil.parse_number_ranges(ui.allowedNotesEdit.text())
+    if headsetpresent and value:
+      if not values:
+        values = []
       values.append(value)
     if not values:
       return
@@ -146,7 +161,7 @@ class SimpleGenerator(IPlugin):
     """
     if name in self.instances:
       ui = self.instances[name][0]
-      midichan = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
+      midichan,headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
       return midichan
     return []
 

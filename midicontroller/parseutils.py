@@ -21,22 +21,39 @@ class ParseUtil(object):
   def __init__(self):
     self.notelookup = notelookup.NoteLookup()
 
+  def cleanup(self, text):
+    cl = "{0}".format(text).lower().strip()
+    cl = cl.replace(" ","")
+    cl = cl.replace("\t","")
+    cl = cl.replace("\n","")
+    cl = cl.replace("\r","")
+    return cl
+
   def parse_midi_channel_list(self, text):
     """
-    parse "1,2 , 3, 4 ,5" into [1,2,3,4,5]
+    parse "1,2 , 3, 4 ,5" into ([1,2,3,4,5], False)
+    parse "1,  2, $,3  ,4"  into ([1,2,3,4], True)
     """
-    try:
-      ms_split = text.split(",")
-      chans = [ int(i) for i in ms_split ]
-      return chans
-    except ValueError:
-      return []
+    chans = []
+    headsetpresent = False
+    text = self.cleanup(text)
+    ms_split = "{0}".format(text).split(",")
+    for c in ms_split:
+      try:
+        channel = int(c)
+        chans.append(channel)
+      except ValueError:
+        if c == '$':
+          headsetpresent = True
+    return chans, headsetpresent
 
   def parse_number_ranges(self, text):
     """
     parse "4:8:2, a4:c#5:2" into [4,6,8,69,71,73]
     """
     values = []
+    headsetpresent = False
+    text = self.cleanup(text)
     try:
       ranges = text.split(",")
       for rng in ranges:
@@ -49,14 +66,44 @@ class ParseUtil(object):
           stop = self.notelookup.lookup(colon_split[1])
           step = int(colon_split[2])
         elif len(colon_split) == 1:
-          start = self.notelookup.lookup(colon_split[0])
-          stop = start
-          step = 1
+          if colon_split[0] == '$':
+            headsetpresent = True
+          else:
+            start = self.notelookup.lookup(colon_split[0])
+            stop = start
+            step = 1
         if start is not None and stop is not None:
           values.extend( [start+i*step for i in range((stop-start)/step+1)])
     except ValueError:
       values = []
-  
-    return values
+ 
+#    print values, headsetpresent
+    return values, headsetpresent
 
+  def parse_int(self, text):
+    text = self.cleanup(text)
+    if text == "$":
+      headsetpresent = True
+    else:
+      headsetpresent = False
+
+    value = []
+    try:
+      value = [int(text)]
+    except ValueError:
+      value = []
+    return value, headsetpresent
+
+  def parse_list_float(self, text):
+    text = self.cleanup(text)
+    vals = []
+    headsetpresent = False
+    for i in text.split(","):
+      try: 
+        f = float(i)
+        vals.append(f)
+      except ValueError:
+        if i == "$":
+          headsetpresent = True
+    return vals, headsetpresent
 

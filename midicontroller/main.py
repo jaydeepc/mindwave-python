@@ -195,6 +195,10 @@ class MyMainWindow(Ui_MainWindow):
     self.prevAttentionPluginIndex = 0
     self.prevMeditationPluginIndex = 0
     self.prevEyeBlinkPluginIndex = 0
+    
+    #enable the following 2 lines of code to debug yapsy discovery
+    #import logging
+    #logging.basicConfig(level=logging.DEBUG)
  
     from yapsy.PluginManager import PluginManagerSingleton
     manager = PluginManagerSingleton.get()

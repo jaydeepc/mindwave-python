@@ -15,6 +15,10 @@
 #      along with mindwave-python.  If not, see <http://www.gnu.org/licenses/>.  #
 ##################################################################################
 
+import sys
+import os
+sys.path += [os.path.normpath(os.path.join(os.path.abspath(__file__), "..", "..", "..", ".."))]
+
 from yapsy.IPlugin import IPlugin
 from yapsy.PluginManager import PluginManagerSingleton
 import parseutils
@@ -104,6 +108,8 @@ class SprayCanGenerator(IPlugin):
     midichan, headsetpresent = self.parseutil.parse_midi_channel_list(ui.midiChannelEdit.text())
 #    print "midi channel: ", midichan
     if headsetpresent and value:
+      if not midichan:
+        midichan = []
       midichan.append(value)
     if not midichan:
       return
@@ -111,12 +117,16 @@ class SprayCanGenerator(IPlugin):
     vels,headsetpresent = self.parseutil.parse_number_ranges(ui.allowedVelsEdit.text())
 #    print "velocities: ", vels
     if headsetpresent and value:
+      if not vels:
+        vels = []
       vels.append(value)
     if not vels:
       return
 
     values,headsetpresent = self.parseutil.parse_number_ranges(ui.centralNoteEdit.text())
     if headsetpresent and value:
+      if not values:
+        values = []
       values.append(value)
 #    print "central note: ", values
     if not values:
@@ -125,6 +135,8 @@ class SprayCanGenerator(IPlugin):
     spreads,headsetpresent = self.parseutil.parse_midi_channel_list(ui.spreadEdit.text())
 #    print "Spreads ", spreads
     if headsetpresent and value:
+      if not spreads:
+        spreads = []
       spreads.append(value)
     if not spreads:
       return
@@ -132,6 +144,8 @@ class SprayCanGenerator(IPlugin):
     notesPerSecond,headsetpresent = self.parseutil.parse_int(ui.notesPerSecondEdit.text())
 #    print "notes per sec: ", notesPerSecond
     if headsetpresent and value:
+      if not notesPerSecond:
+        notesPerSecond = []
       notesPerSecond.append(value)
     if not notesPerSecond:
       return
@@ -139,6 +153,8 @@ class SprayCanGenerator(IPlugin):
     maxJitter,headsetpresent = self.parseutil.parse_list_float(ui.maxJitterEdit.text())
 #    print "max jitter: ", maxJitter
     if headsetpresent and value:
+      if not maxJitter:
+        maxJitter = []
       maxJitter.append(value)
     if not maxJitter:
       return
