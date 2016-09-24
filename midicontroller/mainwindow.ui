@@ -172,6 +172,16 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="resetAllMidiButton">
+        <property name="text">
+         <string>Reset all midi devices</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="selectAllMidiDevice"/>
+      </item>
+      <item>
        <widget class="QPushButton" name="rescanMidiButton">
         <property name="text">
          <string>Rescan midi devices</string>
@@ -837,7 +847,7 @@
      <x>0</x>
      <y>0</y>
      <width>859</width>
-     <height>19</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -96,6 +96,12 @@ class MyMainWindow(Ui_MainWindow):
     for i,rb in enumerate(self.resetButtons):
       rb.clicked.connect(self.reset_button_for_channel(i))
 
+    resetAllMidiButton = self.resetAllMidiButton
+    resetAllMidiButton.clicked.connect(self.reset_button_for_all)
+
+    self.midiAllDevice = self.selectAllMidiDevice
+    self.midiAllDevice.currentIndexChanged.connect(self.choose_midi_device_for_all)
+
     # provide storage to remember the last 512 raw eeg data points
     self.last_512_raw_waves = deque([0]*RAW_VAL_WIN_SIZE, RAW_VAL_WIN_SIZE)
     self.counter = 0
@@ -462,9 +468,11 @@ class MyMainWindow(Ui_MainWindow):
       midiDeviceComboBox.clear()
       for p in self.available_ports:
         midiDeviceComboBox.addItem(p)
-    if self.available_ports:
-      for mo in self.midiOut:
-        mo.open_port(0)
+    for p in self.available_ports:
+        self.selectAllMidiDevice.addItem(p)
+    #if self.available_ports:
+    #  for mo in self.midiOut:
+    #    mo.open_port(0)
 
   def choose_midi_device_for_channel(self, channel):
     """
@@ -479,6 +487,14 @@ class MyMainWindow(Ui_MainWindow):
       self.midiOut[channel].open_port(index)
     return choose_midi_device
 
+  def choose_midi_device_for_all(self):
+      value = self.midiAllDevice.currentText()
+      idx = self.midiAllDevice.findText(value)
+      for i in range(16):
+          self.choose_midi_device_for_channel(i)(0)
+          if idx != -1:
+            self.midiDeviceComboBoxes[i].setCurrentIndex(idx);
+
   def reset_button_for_channel(self, channel):
     """
     returns a callback function suitable to connect to midi channel reset button
@@ -489,6 +505,10 @@ class MyMainWindow(Ui_MainWindow):
       for msg in msgbytes:
         self.midiOut[channel].send_message(msg)
     return reset_channel 
+  
+  def reset_button_for_all(self):
+      for i in range(16):
+          self.reset_button_for_channel(i)(0)
 
   def raw_wave_handler(self, headset, value):
     """

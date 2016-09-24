@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow.ui'
+# Form implementation generated from reading ui file 'midicontroller/mainwindow.ui'
 #
-# Created: Sat Jun  8 00:35:57 2013
-#      by: PyQt4 UI code generator 4.10.1
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -88,6 +87,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem)
+        self.resetAllMidiButton = QtGui.QPushButton(self.centralwidget)
+        self.resetAllMidiButton.setObjectName(_fromUtf8("resetAllMidiButton"))
+        self.horizontalLayout_3.addWidget(self.resetAllMidiButton)
+        self.selectAllMidiDevice = QtGui.QComboBox(self.centralwidget)
+        self.selectAllMidiDevice.setObjectName(_fromUtf8("selectAllMidiDevice"))
+        self.horizontalLayout_3.addWidget(self.selectAllMidiDevice)
         self.rescanMidiButton = QtGui.QPushButton(self.centralwidget)
         self.rescanMidiButton.setObjectName(_fromUtf8("rescanMidiButton"))
         self.horizontalLayout_3.addWidget(self.rescanMidiButton)
@@ -405,7 +410,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addItem(spacerItem2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 859, 19))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 859, 28))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -509,6 +514,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Higher Eye blink frequency (Hz)", None))
         self.higherEyeBlinkFrequency.setText(_translate("MainWindow", "20.0", None))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">Setup channel mapping</span></p></body></html>", None))
+        self.resetAllMidiButton.setText(_translate("MainWindow", "Reset all midi devices", None))
         self.rescanMidiButton.setText(_translate("MainWindow", "Rescan midi devices", None))
         self.label_14.setText(_translate("MainWindow", "MIDI chan 8", None))
         self.label_9.setText(_translate("MainWindow", "MIDI chan 0", None))
@@ -568,14 +574,4 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionSave_state.setText(_translate("MainWindow", "Save state", None))
         self.actionLoad_state.setText(_translate("MainWindow", "Load state", None))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
 
