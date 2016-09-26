@@ -468,6 +468,7 @@ class MyMainWindow(Ui_MainWindow):
       midiDeviceComboBox.clear()
       for p in self.available_ports:
         midiDeviceComboBox.addItem(p)
+    self.selectAllMidiDevice.clear()
     for p in self.available_ports:
         self.selectAllMidiDevice.addItem(p)
     #if self.available_ports:
